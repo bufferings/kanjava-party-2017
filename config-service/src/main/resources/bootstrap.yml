@@ -7,4 +7,4 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/bufferings-sandbox/config-repo
+          uri: https://github.com/bufferings/kanjava-party-2017-config

@@ -63,8 +63,6 @@ services:
       MYSQL_ROOT_PASSWORD: "password"
     ports:
       - "3306:3306"
-    volumes:
-      - "./mysql:/var/lib/mysql"
   phpmyadmin:
     image: "phpmyadmin/phpmyadmin:4.7"
     environment:
@@ -74,7 +72,5 @@ services:
       PMA_PASSWORD: "password"
     ports:
       - "9003:80"
-    volumes:
-      - "/sessions"
     depends_on:
       - "mysql"
