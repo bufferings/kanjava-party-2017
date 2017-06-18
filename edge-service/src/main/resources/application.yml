@@ -1,8 +1,0 @@
-zuul:
-  ignored-services: '*'
-  routes:
-    user-service: /user/**
-security:
-  oauth2:
-    resource:
-      userInfoUri: http://localhost:8181/me

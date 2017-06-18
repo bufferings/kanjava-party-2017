@@ -1,14 +1,5 @@
 doma.dialect: h2
 
-zuul:
-  ignored-services: '*'
-  routes:
-    edge-service:
-      path: /api/**
-      url: http://localhost:9999
-    user-service:
-      path: /user/**
-      url: http://localhost:8181/me
 security:
   oauth2:
     client:
