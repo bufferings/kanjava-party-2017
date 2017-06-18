@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  config-service:
+    image: "bufferingskjp2017/config-service"
+    network_mode: "host"
+    environment:
+      SERVER_PORT: 8888
+  discovery-service:
+    image: "bufferingskjp2017/discovery-service"
+    network_mode: "host"
+    environment:
+      SERVER_PORT: 8761
+    depends_on:
+      - "config-service"
