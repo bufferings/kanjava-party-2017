@@ -1,7 +1,7 @@
 DELETE FROM Product;
 DELETE FROM OrderGroup;
 DELETE FROM OrderItem;
-DELETE FROM OrderSeatView;
+DELETE FROM OrderGuestView;
 DELETE FROM OrderStaffView;
 
 INSERT INTO Product VALUES

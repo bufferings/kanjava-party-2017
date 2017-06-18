@@ -5,8 +5,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.example.api.view.OrderDelivered;
-import com.example.api.view.OrderSeatView;
-import com.example.api.view.OrderSeatViewDao;
+import com.example.api.view.OrderGuestView;
+import com.example.api.view.OrderGuestViewDao;
 import com.example.api.view.OrderStaffView;
 import com.example.api.view.OrderStaffViewDao;
 import com.example.order.domain.event.DomainEvent;
@@ -18,14 +18,14 @@ import com.example.order.domain.event.StoredEvent;
 @Component
 public class Listener {
 
-  private OrderSeatViewDao orderSeatViewDao;
+  private OrderGuestViewDao orderGuestViewDao;
 
   private OrderStaffViewDao orderStaffViewDao;
 
   @Autowired
-  public Listener(OrderSeatViewDao orderSeatViewDao,
+  public Listener(OrderGuestViewDao orderGuestViewDao,
       OrderStaffViewDao orderStaffViewDao) {
-    this.orderSeatViewDao = orderSeatViewDao;
+    this.orderGuestViewDao = orderGuestViewDao;
     this.orderStaffViewDao = orderStaffViewDao;
   }
 
@@ -42,8 +42,8 @@ public class Listener {
   }
 
   private void handleOrderCreatedEvent(OrderCreatedEvent event) {
-    OrderSeatView seatView = createSeatView(event);
-    orderSeatViewDao.insert(seatView);
+    OrderGuestView guestView = createGuestView(event);
+    orderGuestViewDao.insert(guestView);
 
     OrderStaffView staffView = createStaffView(event);
     orderStaffViewDao.insert(staffView);
@@ -61,8 +61,8 @@ public class Listener {
     return view;
   }
 
-  private OrderSeatView createSeatView(OrderCreatedEvent event) {
-    OrderSeatView view = new OrderSeatView();
+  private OrderGuestView createGuestView(OrderCreatedEvent event) {
+    OrderGuestView view = new OrderGuestView();
     view.orderId = event.orderId;
     view.orderGroupId = event.orderGroupId;
     view.tableNumber = event.tableNumber;
@@ -75,16 +75,16 @@ public class Listener {
   }
 
   private void handleOrderDeliveredEvent(OrderDeliveredEvent event) {
-    OrderSeatView seatView = orderSeatViewDao.selectById(event.orderId);
-    seatView.delivered = OrderDelivered.DELIVERED;
-    orderSeatViewDao.update(seatView);
+    OrderGuestView guestView = orderGuestViewDao.selectById(event.orderId);
+    guestView.delivered = OrderDelivered.DELIVERED;
+    orderGuestViewDao.update(guestView);
 
     OrderStaffView staffView = orderStaffViewDao.selectById(event.orderId);
     orderStaffViewDao.delete(staffView);
   }
 
   private void handleOrderGroupClosedEvent(OrderGroupClosedEvent event) {
-    orderSeatViewDao.deleteByGroupId(event.orderGroupId);
+    orderGuestViewDao.deleteByGroupId(event.orderGroupId);
     orderStaffViewDao.deleteByGroupId(event.orderGroupId);
   }
 }

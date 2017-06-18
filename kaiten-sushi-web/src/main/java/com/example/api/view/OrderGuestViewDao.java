@@ -13,19 +13,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @ConfigAutowireable
 @Dao
-public interface OrderSeatViewDao {
+public interface OrderGuestViewDao {
 
   @Insert
-  int insert(OrderSeatView orderSeatView);
+  int insert(OrderGuestView orderGuestView);
 
   @Update
-  int update(OrderSeatView orderSeatView);
+  int update(OrderGuestView orderGuestView);
 
   @Select
-  OrderSeatView selectById(String orderId);
+  OrderGuestView selectById(String orderId);
 
   @Select
-  List<OrderSeatView> selectByTableNumber(Integer tableNumber);
+  List<OrderGuestView> selectByTableNumber(Integer tableNumber);
 
   @Delete(sqlFile = true)
   int deleteByGroupId(String orderGroupId);

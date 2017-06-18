@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.api.view.OrderSeatView;
-import com.example.api.view.OrderSeatViewDao;
+import com.example.api.view.OrderGuestView;
+import com.example.api.view.OrderGuestViewDao;
 import com.example.order.domain.model.product.Product;
 import com.example.order.usecase.OrderUsecase;
 import com.example.order.usecase.ProductUsecase;
@@ -25,13 +25,13 @@ public class GuestApi {
 
   private OrderUsecase orderUsecase;
 
-  private OrderSeatViewDao orderSeatViewDao;
+  private OrderGuestViewDao orderGuestViewDao;
 
   @Autowired
-  public GuestApi(ProductUsecase productUsecase, OrderUsecase orderUsecase, OrderSeatViewDao orderSeatViewDao) {
+  public GuestApi(ProductUsecase productUsecase, OrderUsecase orderUsecase, OrderGuestViewDao orderGuestViewDao) {
     this.productUsecase = productUsecase;
     this.orderUsecase = orderUsecase;
-    this.orderSeatViewDao = orderSeatViewDao;
+    this.orderGuestViewDao = orderGuestViewDao;
   }
 
   @RequestMapping(path = "products", method = RequestMethod.GET)
@@ -45,9 +45,9 @@ public class GuestApi {
   }
 
   @RequestMapping(path = "orders", method = RequestMethod.GET)
-  public List<OrderSeatView> getOrders() {
+  public List<OrderGuestView> getOrders() {
     int tableNumber = DUMMY_TABLE_NUMBER;
-    return orderSeatViewDao.selectByTableNumber(tableNumber);
+    return orderGuestViewDao.selectByTableNumber(tableNumber);
   }
 
   @RequestMapping(path = "orders/add", method = RequestMethod.POST)

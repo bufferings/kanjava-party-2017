@@ -8,8 +8,6 @@ SELECT
   ,orderDateTime
   ,delivered
 FROM
-  OrderSeatView
+  OrderGuestView
 WHERE
-  tableNumber = /* tableNumber */1
-ORDER BY
-  orderDateTime DESC
+  orderId = /* orderId */1
