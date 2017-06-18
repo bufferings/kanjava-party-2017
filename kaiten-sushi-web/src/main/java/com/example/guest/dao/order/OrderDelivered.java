@@ -1,4 +1,4 @@
-package com.example.api.view;
+package com.example.guest.dao.order;
 
 import org.seasar.doma.Domain;
 

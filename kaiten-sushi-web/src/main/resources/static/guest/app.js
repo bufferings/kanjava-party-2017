@@ -75,7 +75,7 @@ angular.module('guestApp', [ 'ngRoute', 'ngAnimate' ])
       },
       transformRequest : transform,
       data : {
-        productId : $scope.product.id.value,
+        productId : $scope.product.productId,
         quantity : quantity
       }
     }).success(function(data, status, headers, config) {

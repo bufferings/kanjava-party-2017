@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import com.example.api.view.OrderDelivered;
-import com.example.api.view.OrderGuestView;
-import com.example.api.view.OrderGuestViewDao;
 import com.example.api.view.OrderStaffView;
 import com.example.api.view.OrderStaffViewDao;
+import com.example.guest.dao.order.OrderDelivered;
+import com.example.guest.dao.order.OrderGuestView;
+import com.example.guest.dao.order.OrderGuestViewDao;
 import com.example.order.domain.event.DomainEvent;
 import com.example.order.domain.event.OrderCreatedEvent;
 import com.example.order.domain.event.OrderDeliveredEvent;
