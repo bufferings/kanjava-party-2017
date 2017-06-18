@@ -3,4 +3,4 @@ server:
 security:
   oauth2:
     resource:
-      userInfoUri: https://api.github.com/user
+      user-info-uri: https://api.github.com/user
