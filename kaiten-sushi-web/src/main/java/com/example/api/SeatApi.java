@@ -28,8 +28,7 @@ public class SeatApi {
   private OrderSeatViewDao orderSeatViewDao;
 
   @Autowired
-  public SeatApi(ProductUsecase productUsecase, OrderUsecase orderUsecase,
-      OrderSeatViewDao orderSeatViewDao) {
+  public SeatApi(ProductUsecase productUsecase, OrderUsecase orderUsecase, OrderSeatViewDao orderSeatViewDao) {
     this.productUsecase = productUsecase;
     this.orderUsecase = orderUsecase;
     this.orderSeatViewDao = orderSeatViewDao;
@@ -52,8 +51,7 @@ public class SeatApi {
   }
 
   @RequestMapping(path = "orders/add", method = RequestMethod.POST)
-  public void addOrder(@RequestParam("productId") String productId,
-      @RequestParam("quantity") int quantity) {
+  public void addOrder(@RequestParam("productId") String productId, @RequestParam("quantity") int quantity) {
     int tableNumber = DUMMY_TABLE_NUMBER;
     orderUsecase.addOrder(tableNumber, productId, quantity);
   }

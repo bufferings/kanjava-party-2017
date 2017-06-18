@@ -25,9 +25,14 @@ public class SushiApplication extends WebSecurityConfigurerAdapter {
       .antMatcher("/**").authorizeRequests()
       .antMatchers("/", "/login**", "/user").permitAll()
       .anyRequest().authenticated();
-    // @formatter:on
-    http.logout().logoutSuccessUrl("/").permitAll();
+    
+    http
+      .logout()
+      .logoutSuccessUrl("/")
+      .permitAll();
+
     http.csrf().disable();
+    // @formatter:on
   }
 
 }
