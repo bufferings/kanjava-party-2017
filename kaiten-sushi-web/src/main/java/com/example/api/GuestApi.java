@@ -16,8 +16,8 @@ import com.example.order.usecase.OrderUsecase;
 import com.example.order.usecase.ProductUsecase;
 
 @RestController
-@RequestMapping("seat/api")
-public class SeatApi {
+@RequestMapping("guest/api")
+public class GuestApi {
 
   private static final int DUMMY_TABLE_NUMBER = 21;
 
@@ -28,7 +28,7 @@ public class SeatApi {
   private OrderSeatViewDao orderSeatViewDao;
 
   @Autowired
-  public SeatApi(ProductUsecase productUsecase, OrderUsecase orderUsecase, OrderSeatViewDao orderSeatViewDao) {
+  public GuestApi(ProductUsecase productUsecase, OrderUsecase orderUsecase, OrderSeatViewDao orderSeatViewDao) {
     this.productUsecase = productUsecase;
     this.orderUsecase = orderUsecase;
     this.orderSeatViewDao = orderSeatViewDao;

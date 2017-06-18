@@ -5,8 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -33,6 +36,17 @@ public class SushiApplication extends WebSecurityConfigurerAdapter {
 
     http.csrf().disable();
     // @formatter:on
+  }
+
+  @Bean
+  public WebMvcConfigurerAdapter forwardToIndex() {
+    return new WebMvcConfigurerAdapter() {
+      @Override
+      public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/staff/").setViewName("forward:/staff/index.html");
+        registry.addViewController("/guest/").setViewName("forward:/guest/index.html");
+      }
+    };
   }
 
 }

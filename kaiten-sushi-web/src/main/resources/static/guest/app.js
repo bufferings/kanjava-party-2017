@@ -1,6 +1,6 @@
 $(".button-collapse").sideNav();
 
-angular.module('seatApp', [ 'ngRoute', 'ngAnimate' ])
+angular.module('guestApp', [ 'ngRoute', 'ngAnimate' ])
 
 //
 .filter('numberFixedLen', function() {
@@ -25,7 +25,7 @@ angular.module('seatApp', [ 'ngRoute', 'ngAnimate' ])
     templateUrl : 'view/home.html',
     resolve : {
       products : function($http) {
-        return $http.get('/seat/api/products');
+        return $http.get('/guest/api/products');
       }
     }
   }).when('/products/:id', {
@@ -33,7 +33,7 @@ angular.module('seatApp', [ 'ngRoute', 'ngAnimate' ])
     templateUrl : 'view/product.html',
     resolve : {
       product : function($http, $route) {
-        return $http.get('/seat/api/products/' + $route.current.params.id);
+        return $http.get('/guest/api/products/' + $route.current.params.id);
       }
     }
   }).when('/orders', {
@@ -41,7 +41,7 @@ angular.module('seatApp', [ 'ngRoute', 'ngAnimate' ])
     templateUrl : 'view/orders.html',
     resolve : {
       orders : function($http) {
-        return $http.get('/seat/api/orders');
+        return $http.get('/guest/api/orders');
       }
     }
   }).when('/checkout', {
@@ -69,7 +69,7 @@ angular.module('seatApp', [ 'ngRoute', 'ngAnimate' ])
     }
     $http({
       method : 'POST',
-      url : '/seat/api/orders/add',
+      url : '/guest/api/orders/add',
       headers : {
         'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
       },
@@ -97,6 +97,6 @@ angular.module('seatApp', [ 'ngRoute', 'ngAnimate' ])
 .controller('CheckoutController', function($http) {
   $http({
     method : 'POST',
-    url : '/seat/api/checkout'
+    url : '/guest/api/checkout'
   });
 });
