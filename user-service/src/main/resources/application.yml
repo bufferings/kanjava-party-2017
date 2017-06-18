@@ -3,4 +3,4 @@ server:
 security:
   oauth2:
     resource:
-      userInfoUri: http://localhost:8080/uaa/userinfo
+      userInfoUri: https://api.github.com/user

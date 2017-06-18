@@ -20,9 +20,12 @@ public class SushiApplication extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(HttpSecurity http) throws Exception {
-    http.antMatcher("/**").authorizeRequests()
-        .antMatchers("/", "/login**", "/user").permitAll().anyRequest()
-        .authenticated();
+    // @formatter:off
+    http
+      .antMatcher("/**").authorizeRequests()
+      .antMatchers("/", "/login**", "/user").permitAll()
+      .anyRequest().authenticated();
+    // @formatter:on
     http.logout().logoutSuccessUrl("/").permitAll();
     http.csrf().disable();
   }
