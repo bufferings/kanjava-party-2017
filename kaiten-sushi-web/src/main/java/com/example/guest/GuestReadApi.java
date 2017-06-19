@@ -1,9 +1,9 @@
 package com.example.guest;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +13,7 @@ import com.example.guest.dao.order.OrderGuestView;
 import com.example.guest.dao.order.OrderGuestViewDao;
 import com.example.guest.dao.product.ProductGuestView;
 import com.example.guest.dao.product.ProductGuestViewDao;
+import com.example.security.LoginUser;
 
 @RestController
 @RequestMapping("guest/api")
@@ -39,8 +40,7 @@ public class GuestReadApi {
   }
 
   @GetMapping("orders")
-  public List<OrderGuestView> getOrders(Principal principal) {
-    System.err.println(principal);
+  public List<OrderGuestView> getOrders(@AuthenticationPrincipal LoginUser loginUser) {
     return orderGuestViewDao.selectByTableNumber(21);
   }
 
