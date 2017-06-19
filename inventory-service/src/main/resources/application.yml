@@ -1,0 +1,12 @@
+server:
+  port: 8183
+
+spring:
+  kafka:
+    consumer:
+      group-id: foo
+      auto-offset-reset: latest
+
+schema:
+  registry:
+    url: http://localhost:8081
