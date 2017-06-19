@@ -2,4 +2,4 @@ spring:
   application:
     name: kaiten-sushi-web
 server:
-  port: 8787
+  port: 8080
