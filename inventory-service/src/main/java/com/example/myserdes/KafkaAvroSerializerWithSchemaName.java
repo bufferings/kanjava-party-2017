@@ -14,7 +14,6 @@ public class KafkaAvroSerializerWithSchemaName extends AbstractKafkaAvroSerializ
    * Constructor used by Kafka producer.
    */
   public KafkaAvroSerializerWithSchemaName() {
-
   }
 
   public KafkaAvroSerializerWithSchemaName(SchemaRegistryClient client) {
