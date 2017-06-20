@@ -23,8 +23,7 @@ public class Listener {
   private OrderStaffViewDao orderStaffViewDao;
 
   @Autowired
-  public Listener(OrderGuestViewDao orderGuestViewDao,
-      OrderStaffViewDao orderStaffViewDao) {
+  public Listener(OrderGuestViewDao orderGuestViewDao, OrderStaffViewDao orderStaffViewDao) {
     this.orderGuestViewDao = orderGuestViewDao;
     this.orderStaffViewDao = orderStaffViewDao;
   }
@@ -53,10 +52,11 @@ public class Listener {
     OrderStaffView view = new OrderStaffView();
     view.orderId = event.orderId;
     view.orderGroupId = event.orderGroupId;
+    view.orderGuestId = event.orderGuestId;
+    view.orderGuestName = event.orderGuestName;
     view.productId = event.productId;
     view.productName = event.productName;
     view.quantity = event.quantity;
-    view.tableNumber = event.tableNumber;
     view.orderDateTime = event.orderDateTime;
     return view;
   }
@@ -65,7 +65,8 @@ public class Listener {
     OrderGuestView view = new OrderGuestView();
     view.orderId = event.orderId;
     view.orderGroupId = event.orderGroupId;
-    view.tableNumber = event.tableNumber;
+    view.orderGuestId = event.orderGuestId;
+    view.orderGuestName = event.orderGuestName;
     view.productId = event.productId;
     view.productName = event.productName;
     view.quantity = event.quantity;

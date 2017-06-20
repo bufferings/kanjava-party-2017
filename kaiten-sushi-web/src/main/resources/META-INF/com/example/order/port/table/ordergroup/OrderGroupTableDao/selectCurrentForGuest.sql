@@ -1,10 +1,11 @@
 SELECT
   orderGroupId
-  ,tableNumber
+  ,orderGuestId
+  ,orderGuestName
   ,status
   ,version
 FROM
   OrderGroup
 WHERE
-  tableNumber = /* tableNumber */1
+  orderGuestId = /* orderGuestId */1
   AND status <> 3

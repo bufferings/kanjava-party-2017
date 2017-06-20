@@ -1,6 +1,7 @@
 SELECT
   orderGroupId
-  ,tableNumber
+  ,orderGuestId
+  ,orderGuestName
   ,status
   ,version
 FROM

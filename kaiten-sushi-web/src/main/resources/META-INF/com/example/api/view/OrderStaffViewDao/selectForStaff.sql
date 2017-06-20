@@ -1,7 +1,8 @@
 SELECT
   orderId
   ,orderGroupId
-  ,tableNumber
+  ,orderGuestId
+  ,orderGuestName
   ,productId
   ,productName
   ,quantity

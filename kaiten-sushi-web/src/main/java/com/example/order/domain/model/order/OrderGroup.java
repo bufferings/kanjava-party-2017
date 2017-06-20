@@ -17,23 +17,22 @@ import lombok.ToString;
 @ToString
 public class OrderGroup {
 
-  public static OrderGroup newOrderGroup(OrderGroupId id,
-      TableNumber tableNumber) {
-    return new OrderGroup(id, tableNumber, OrderGroupStatus.OPENED,
-        new ArrayList<Order>(), -1);
+  public static OrderGroup newOrderGroup(OrderGroupId id, OrderGuestId guestId, OrderGuestName guestName) {
+    return new OrderGroup(id, guestId, guestName, OrderGroupStatus.OPENED, new ArrayList<Order>(), -1);
   }
 
-  public static OrderGroup restoreFromDataStore(OrderGroupId id,
-      TableNumber tableNumber, OrderGroupStatus status, List<Order> orders,
-      Integer version) {
+  public static OrderGroup restoreFromDataStore(OrderGroupId id, OrderGuestId guestId, OrderGuestName guestName,
+      OrderGroupStatus status, List<Order> orders, Integer version) {
     Assert.notNull(version);
     Assert.isTrue(version >= 1);
-    return new OrderGroup(id, tableNumber, status, orders, version);
+    return new OrderGroup(id, guestId, guestName, status, orders, version);
   }
 
   private OrderGroupId id;
 
-  private TableNumber tableNumber;
+  private OrderGuestId guestId;
+
+  private OrderGuestName guestName;
 
   private OrderGroupStatus status;
 
@@ -41,18 +40,18 @@ public class OrderGroup {
 
   private Integer version;
 
-  private OrderGroup(OrderGroupId id, TableNumber tableNumber,
-      OrderGroupStatus status, List<Order> orders, Integer version) {
+  private OrderGroup(OrderGroupId id, OrderGuestId guestId, OrderGuestName guestName, OrderGroupStatus status,
+      List<Order> orders, Integer version) {
     this.setId(id);
-    this.setTableNumber(tableNumber);
+    this.setGuestId(guestId);
+    this.setGuestName(guestName);
     this.setStatus(status);
     this.setOrders(orders);
     this.setVersion(version);
   }
 
   public Order addOrder(ProductId productId, OrderQuantity quantity) {
-    Order newOrder = Order.newOrder(new OrderId(IdUtil.generateId()), productId,
-        quantity);
+    Order newOrder = Order.newOrder(new OrderId(IdUtil.generateId()), productId, quantity);
     this.getOrders().add(newOrder);
     return newOrder;
   }
@@ -117,9 +116,14 @@ public class OrderGroup {
     this.id = id;
   }
 
-  private void setTableNumber(TableNumber tableNumber) {
-    Assert.notNull(tableNumber);
-    this.tableNumber = tableNumber;
+  private void setGuestId(OrderGuestId guestId) {
+    Assert.notNull(guestId);
+    this.guestId = guestId;
+  }
+
+  private void setGuestName(OrderGuestName guestName) {
+    Assert.notNull(guestName);
+    this.guestName = guestName;
   }
 
   private void setStatus(OrderGroupStatus status) {

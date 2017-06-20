@@ -16,7 +16,9 @@ public class OrderStaffView {
 
   public String orderGroupId;
 
-  public Integer tableNumber;
+  public Integer orderGuestId;
+
+  public String orderGuestName;
 
   public String productId;
 

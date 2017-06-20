@@ -6,7 +6,7 @@ public interface OrderRepository {
 
   void save(OrderGroup orderGroup);
 
-  OrderGroup activeOrderGroupOf(TableNumber tableNumber);
+  OrderGroup activeOrderGroupOf(OrderGuestId guestId);
 
   OrderGroup orderGroupOfId(OrderGroupId orderGroupId);
 

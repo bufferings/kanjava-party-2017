@@ -11,7 +11,9 @@ public class OrderCreatedEvent implements DomainEvent {
 
   public final String orderGroupId;
 
-  public final Integer tableNumber;
+  public final Integer orderGuestId;
+
+  public final String orderGuestName;
 
   public final String productId;
 

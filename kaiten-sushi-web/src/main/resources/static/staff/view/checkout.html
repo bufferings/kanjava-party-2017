@@ -5,14 +5,14 @@
   <table class="bordered">
     <thead>
       <tr>
-        <th data-field="name">テーブル番号</th>
+        <th data-field="name">お名前</th>
         <th data-field="delivery-count">お会計</th>
       </tr>
     </thead>
 
     <tbody>
       <tr ng-repeat="orderGroup in orderGroups">
-        <td>{{ orderGroup.tableNumber.value }}</td>
+        <td>{{ orderGroup.guestName.value }} さん</td>
         <td><a class="waves-effect waves-light btn-large" ng-click="close(orderGroup.id.value)">お会計</a></td>
       </tr>
     </tbody>

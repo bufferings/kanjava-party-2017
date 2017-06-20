@@ -10,9 +10,10 @@ import com.example.order.domain.event.StoredEvent;
 import com.example.order.domain.model.order.Order;
 import com.example.order.domain.model.order.OrderGroup;
 import com.example.order.domain.model.order.OrderGroupId;
+import com.example.order.domain.model.order.OrderGuestId;
+import com.example.order.domain.model.order.OrderGuestName;
 import com.example.order.domain.model.order.OrderQuantity;
 import com.example.order.domain.model.order.OrderRepository;
-import com.example.order.domain.model.order.TableNumber;
 import com.example.order.domain.model.product.Product;
 import com.example.order.domain.model.product.ProductId;
 import com.example.order.domain.model.product.ProductRepository;
@@ -28,25 +29,23 @@ public class OrderAddService {
   private KafkaTemplate<String, StoredEvent> kafkaTemplate;
 
   @Autowired
-  public OrderAddService(OrderRepository orderRepository,
-      ProductRepository productRepository,
+  public OrderAddService(OrderRepository orderRepository, ProductRepository productRepository,
       KafkaTemplate<String, StoredEvent> kafkaTemplate) {
     this.orderRepository = orderRepository;
     this.productRepository = productRepository;
     this.kafkaTemplate = kafkaTemplate;
   }
 
-  public void addOrder(TableNumber tableNumber, ProductId productId,
-      OrderQuantity quantity) {
+  public void addOrder(OrderGuestId guestId, OrderGuestName guestName, ProductId productId, OrderQuantity quantity) {
 
     Product product = productRepository.productOfId(productId);
     Assert.notNull(product);
     Assert.isTrue(product.canKeepStockForOrder(quantity));
 
-    OrderGroup orderGroup = orderRepository.activeOrderGroupOf(tableNumber);
+    OrderGroup orderGroup = orderRepository.activeOrderGroupOf(guestId);
     if (orderGroup == null) {
       OrderGroupId orderGroupId = new OrderGroupId(IdUtil.generateId());
-      orderGroup = OrderGroup.newOrderGroup(orderGroupId, tableNumber);
+      orderGroup = OrderGroup.newOrderGroup(orderGroupId, guestId, guestName);
     }
 
     Order newOrder = orderGroup.addOrder(productId, quantity);
@@ -56,10 +55,8 @@ public class OrderAddService {
     productRepository.save(product);
 
     kafkaTemplate.send("topic1",
-        new StoredEvent(new OrderCreatedEvent(newOrder.getId().getValue(),
-            orderGroup.getId().getValue(),
-            orderGroup.getTableNumber().getValue(), product.getId().getValue(),
-            product.getName().getValue(), newOrder.getQuantity().getValue(),
-            newOrder.getOrderedOn().getValue())));
+        new StoredEvent(new OrderCreatedEvent(newOrder.getId().getValue(), orderGroup.getId().getValue(),
+            orderGroup.getGuestId().getValue(), orderGroup.getGuestName().getValue(), product.getId().getValue(),
+            product.getName().getValue(), newOrder.getQuantity().getValue(), newOrder.getOrderedOn().getValue())));
   }
 }

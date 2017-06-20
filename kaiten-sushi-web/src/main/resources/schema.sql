@@ -15,7 +15,8 @@ CREATE TABLE Product
 CREATE TABLE OrderGroup
 (
   orderGroupId VARCHAR(36) PRIMARY KEY
-  ,tableNumber INT
+  ,orderGuestId INT
+  ,orderGuestName VARCHAR(30)
   ,status INT
   ,version INT
 );
@@ -34,9 +35,10 @@ CREATE TABLE OrderGuestView
 (
   orderId VARCHAR(36) PRIMARY KEY
   ,orderGroupId VARCHAR(36)
+  ,orderGuestId INT
+  ,orderGuestName VARCHAR(30)
   ,productId VARCHAR(36)
   ,productName VARCHAR(30)
-  ,tableNumber INT
   ,quantity INT
   ,orderDateTime DATETIME
   ,delivered INT
@@ -46,9 +48,10 @@ CREATE TABLE OrderStaffView
 (
   orderId VARCHAR(36) PRIMARY KEY
   ,orderGroupId VARCHAR(36)
+  ,orderGuestId INT
+  ,orderGuestName VARCHAR(30)
   ,productId VARCHAR(36)
   ,productName VARCHAR(30)
-  ,tableNumber INT
   ,quantity INT
   ,orderDateTime DATETIME
 );

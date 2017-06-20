@@ -41,7 +41,7 @@ public class GuestReadApi {
 
   @GetMapping("orders")
   public List<OrderGuestView> getOrders(@AuthenticationPrincipal LoginUser loginUser) {
-    return orderGuestViewDao.selectByTableNumber(21);
+    return orderGuestViewDao.selectByGuestId(loginUser.getId());
   }
 
 }

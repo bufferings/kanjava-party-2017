@@ -22,7 +22,7 @@ public interface OrderGroupTableDao {
   OrderGroupTable selectById(String orderGroupId);
 
   @Select
-  OrderGroupTable selectCurrentForTable(Integer tableNumber);
+  OrderGroupTable selectCurrentForGuest(Integer orderGuestId);
 
   @Select
   List<OrderGroupTable> selectCheckout();

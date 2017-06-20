@@ -1,7 +1,8 @@
 SELECT
   orderId
   ,orderGroupId
-  ,tableNumber
+  ,orderGuestId
+  ,orderGuestName
   ,productId
   ,productName
   ,quantity
@@ -10,6 +11,6 @@ SELECT
 FROM
   OrderGuestView
 WHERE
-  tableNumber = /* tableNumber */1
+  orderGuestId = /* orderGuestId */1
 ORDER BY
   orderDateTime DESC

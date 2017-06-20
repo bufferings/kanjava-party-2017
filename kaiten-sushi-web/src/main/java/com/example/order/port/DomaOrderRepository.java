@@ -11,11 +11,12 @@ import com.example.order.domain.model.order.OrderDateTime;
 import com.example.order.domain.model.order.OrderGroup;
 import com.example.order.domain.model.order.OrderGroupId;
 import com.example.order.domain.model.order.OrderGroupStatus;
+import com.example.order.domain.model.order.OrderGuestId;
+import com.example.order.domain.model.order.OrderGuestName;
 import com.example.order.domain.model.order.OrderId;
 import com.example.order.domain.model.order.OrderQuantity;
 import com.example.order.domain.model.order.OrderRepository;
 import com.example.order.domain.model.order.OrderStatus;
-import com.example.order.domain.model.order.TableNumber;
 import com.example.order.domain.model.product.ProductId;
 import com.example.order.port.table.ordergroup.OrderGroupTable;
 import com.example.order.port.table.ordergroup.OrderGroupTableDao;
@@ -30,8 +31,7 @@ public class DomaOrderRepository implements OrderRepository {
   private OrderItemTableDao orderItemTableDao;
 
   @Autowired
-  public DomaOrderRepository(OrderGroupTableDao orderGroupTableDao,
-      OrderItemTableDao orderItemTableDao) {
+  public DomaOrderRepository(OrderGroupTableDao orderGroupTableDao, OrderItemTableDao orderItemTableDao) {
     this.orderGroupTableDao = orderGroupTableDao;
     this.orderItemTableDao = orderItemTableDao;
   }
@@ -45,13 +45,11 @@ public class DomaOrderRepository implements OrderRepository {
       orderItemRecords = new ArrayList<>();
     } else {
       orderGroupTableDao.update(orderGroupRecord);
-      orderItemRecords = orderItemTableDao
-          .selectByOrderGroupid(orderGroup.getId().getValue());
+      orderItemRecords = orderItemTableDao.selectByOrderGroupid(orderGroup.getId().getValue());
     }
 
     for (Order order : orderGroup.getOrders()) {
-      OrderItemTable orderItemRecord = orderItemRecordFrom(orderGroup.getId(),
-          order);
+      OrderItemTable orderItemRecord = orderItemRecordFrom(orderGroup.getId(), order);
       if (exists(orderItemRecord, orderItemRecords)) {
         orderItemTableDao.update(orderItemRecord);
       } else {
@@ -63,26 +61,22 @@ public class DomaOrderRepository implements OrderRepository {
   }
 
   @Override
-  public OrderGroup activeOrderGroupOf(TableNumber tableNumber) {
-    OrderGroupTable orderGroupRecord = orderGroupTableDao
-        .selectCurrentForTable(tableNumber.getValue());
+  public OrderGroup activeOrderGroupOf(OrderGuestId guestId) {
+    OrderGroupTable orderGroupRecord = orderGroupTableDao.selectCurrentForGuest(guestId.getValue());
     if (orderGroupRecord == null) {
       return null;
     }
-    List<OrderItemTable> orderRecords = orderItemTableDao
-        .selectByOrderGroupid(orderGroupRecord.orderGroupId);
+    List<OrderItemTable> orderRecords = orderItemTableDao.selectByOrderGroupid(orderGroupRecord.orderGroupId);
     return orderGroupFrom(orderGroupRecord, orderRecords);
   }
 
   @Override
   public OrderGroup orderGroupOfId(OrderGroupId orderGroupId) {
-    OrderGroupTable orderGroupRecord = orderGroupTableDao
-        .selectById(orderGroupId.getValue());
+    OrderGroupTable orderGroupRecord = orderGroupTableDao.selectById(orderGroupId.getValue());
     if (orderGroupRecord == null) {
       return null;
     }
-    List<OrderItemTable> orderRecords = orderItemTableDao
-        .selectByOrderGroupid(orderGroupRecord.orderGroupId);
+    List<OrderItemTable> orderRecords = orderItemTableDao.selectByOrderGroupid(orderGroupRecord.orderGroupId);
     return orderGroupFrom(orderGroupRecord, orderRecords);
   }
 
@@ -90,28 +84,23 @@ public class DomaOrderRepository implements OrderRepository {
   public List<OrderGroup> checkoutOrderGroups() {
     List<OrderGroup> result = new ArrayList<>();
 
-    List<OrderGroupTable> orderGroupRecords = orderGroupTableDao
-        .selectCheckout();
+    List<OrderGroupTable> orderGroupRecords = orderGroupTableDao.selectCheckout();
     for (OrderGroupTable orderGroupRecord : orderGroupRecords) {
-      List<OrderItemTable> orderRecords = orderItemTableDao
-          .selectByOrderGroupid(orderGroupRecord.orderGroupId);
+      List<OrderItemTable> orderRecords = orderItemTableDao.selectByOrderGroupid(orderGroupRecord.orderGroupId);
       OrderGroup orderGroup = orderGroupFrom(orderGroupRecord, orderRecords);
       result.add(orderGroup);
     }
     return result;
   }
 
-  private OrderGroup orderGroupFrom(OrderGroupTable orderGroupRecord,
-      List<OrderItemTable> orderRecords) {
+  private OrderGroup orderGroupFrom(OrderGroupTable orderGroupRecord, List<OrderItemTable> orderRecords) {
     List<Order> orders = new ArrayList<>();
     for (OrderItemTable orderRecord : orderRecords) {
       orders.add(orderFrom(orderRecord));
     }
-    return OrderGroup.restoreFromDataStore(
-        new OrderGroupId(orderGroupRecord.orderGroupId),
-        new TableNumber(orderGroupRecord.tableNumber),
-        orderGroupStatusFrom(orderGroupRecord.status), orders,
-        orderGroupRecord.version);
+    return OrderGroup.restoreFromDataStore(new OrderGroupId(orderGroupRecord.orderGroupId),
+        new OrderGuestId(orderGroupRecord.orderGuestId), new OrderGuestName(orderGroupRecord.orderGuestName),
+        orderGroupStatusFrom(orderGroupRecord.status), orders, orderGroupRecord.version);
   }
 
   private OrderGroupStatus orderGroupStatusFrom(Integer status) {
@@ -127,10 +116,8 @@ public class DomaOrderRepository implements OrderRepository {
   }
 
   private Order orderFrom(OrderItemTable orderRecord) {
-    return Order.restoreFromDataStore(new OrderId(orderRecord.orderItemId),
-        new ProductId(orderRecord.productId),
-        new OrderQuantity(orderRecord.quantity),
-        new OrderDateTime(orderRecord.orderDateTime),
+    return Order.restoreFromDataStore(new OrderId(orderRecord.orderItemId), new ProductId(orderRecord.productId),
+        new OrderQuantity(orderRecord.quantity), new OrderDateTime(orderRecord.orderDateTime),
         orderStatusFrom(orderRecord.status));
   }
 
@@ -147,7 +134,8 @@ public class DomaOrderRepository implements OrderRepository {
   private OrderGroupTable orderGroupRecordFrom(OrderGroup orderGroup) {
     OrderGroupTable record = new OrderGroupTable();
     record.orderGroupId = orderGroup.getId().getValue();
-    record.tableNumber = orderGroup.getTableNumber().getValue();
+    record.orderGuestId = orderGroup.getGuestId().getValue();
+    record.orderGuestName = orderGroup.getGuestName().getValue();
     record.status = orderGroupRecordStatusFrom(orderGroup.getStatus());
     record.version = orderGroup.getVersion();
     return record;
@@ -166,8 +154,7 @@ public class DomaOrderRepository implements OrderRepository {
     }
   }
 
-  private OrderItemTable orderItemRecordFrom(OrderGroupId orderGroupId,
-      Order order) {
+  private OrderItemTable orderItemRecordFrom(OrderGroupId orderGroupId, Order order) {
     OrderItemTable orderItemRecord = new OrderItemTable();
     orderItemRecord.orderItemId = order.getId().getValue();
     orderItemRecord.orderGroupId = orderGroupId.getValue();
@@ -189,8 +176,7 @@ public class DomaOrderRepository implements OrderRepository {
     }
   }
 
-  private boolean exists(OrderItemTable target,
-      List<OrderItemTable> existingOrderItemRecords) {
+  private boolean exists(OrderItemTable target, List<OrderItemTable> existingOrderItemRecords) {
     for (OrderItemTable record : existingOrderItemRecords) {
       if (record.orderItemId.equals(target.orderItemId)) {
         return true;

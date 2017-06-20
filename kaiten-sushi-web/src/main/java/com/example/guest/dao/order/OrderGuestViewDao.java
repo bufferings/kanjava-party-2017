@@ -25,7 +25,7 @@ public interface OrderGuestViewDao {
   OrderGuestView selectById(String orderId);
 
   @Select
-  List<OrderGuestView> selectByTableNumber(Integer tableNumber);
+  List<OrderGuestView> selectByGuestId(Integer orderGuestId);
 
   @Delete(sqlFile = true)
   int deleteByGroupId(String orderGroupId);
