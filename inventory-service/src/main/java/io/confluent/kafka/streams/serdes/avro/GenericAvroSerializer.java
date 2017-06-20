@@ -39,6 +39,9 @@ import io.confluent.kafka.serializers.KafkaAvroSerializer;
  * <p>
  * See {@link GenericAvroDeserializer} for its deserializer counterpart.
  * </p>
+ * 
+ * Notice: This file is copied from github until Confluent 3.3 is released.
+ * https://github.com/confluentinc/schema-registry/tree/master/avro-serde/src/main/java/io/confluent/kafka/streams/serdes/avro
  */
 @InterfaceStability.Unstable
 public class GenericAvroSerializer implements Serializer<GenericRecord> {
