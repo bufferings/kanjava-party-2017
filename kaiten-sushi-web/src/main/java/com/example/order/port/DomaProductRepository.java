@@ -1,8 +1,5 @@
 package com.example.order.port;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,19 +22,8 @@ public class DomaProductRepository implements ProductRepository {
   }
 
   @Override
-  public List<Product> products() {
-    List<ProductTable> productRecords = productTableDao.selectAll();
-    List<Product> products = new ArrayList<>();
-    for (ProductTable record : productRecords) {
-      products.add(productFrom(record));
-    }
-    return products;
-  }
-
-  @Override
   public Product productOfId(ProductId productId) {
-    ProductTable productRecord = productTableDao
-        .selectById(productId.getValue());
+    ProductTable productRecord = productTableDao.selectById(productId.getValue());
     return productFrom(productRecord);
   }
 
@@ -48,8 +34,7 @@ public class DomaProductRepository implements ProductRepository {
   }
 
   private Product productFrom(ProductTable record) {
-    return Product.restoreFromDataStore(new ProductId(record.productId),
-        new ProductName(record.productName),
+    return Product.restoreFromDataStore(new ProductId(record.productId), new ProductName(record.productName),
         new StockQuantity(record.stockQuantity), record.version);
   }
 

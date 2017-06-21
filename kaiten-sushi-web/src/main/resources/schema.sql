@@ -1,8 +1,11 @@
 DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS OrderGroup;
 DROP TABLE IF EXISTS OrderItem;
-DROP TABLE IF EXISTS OrderGuestView;
-DROP TABLE IF EXISTS OrderStaffView;
+
+DROP TABLE IF EXISTS GuestProductView;
+DROP TABLE IF EXISTS GuestOrderView;
+
+DROP TABLE IF EXISTS StaffOrderView;
 
 CREATE TABLE Product
 (
@@ -31,7 +34,13 @@ CREATE TABLE OrderItem
   ,status INT
 );
 
-CREATE TABLE OrderGuestView
+CREATE TABLE GuestProductView
+(
+  productId VARCHAR(36) PRIMARY KEY
+  ,productName VARCHAR(30)
+);
+
+CREATE TABLE GuestOrderView
 (
   orderId VARCHAR(36) PRIMARY KEY
   ,orderGroupId VARCHAR(36)
@@ -44,7 +53,7 @@ CREATE TABLE OrderGuestView
   ,delivered INT
 );
 
-CREATE TABLE OrderStaffView
+CREATE TABLE StaffOrderView
 (
   orderId VARCHAR(36) PRIMARY KEY
   ,orderGroupId VARCHAR(36)

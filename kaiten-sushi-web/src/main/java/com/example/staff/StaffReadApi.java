@@ -7,22 +7,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.staff.dao.OrderStaffView;
-import com.example.staff.dao.OrderStaffViewDao;
+import com.example.staff.dao.StaffOrderView;
+import com.example.staff.dao.StaffOrderViewDao;
 
 @RestController
 @RequestMapping("staff/api")
 public class StaffReadApi {
 
-  private OrderStaffViewDao orderStaffViewDao;
+  private StaffOrderViewDao orderStaffViewDao;
 
   @Autowired
-  public StaffReadApi(OrderStaffViewDao orderStaffViewDao) {
+  public StaffReadApi(StaffOrderViewDao orderStaffViewDao) {
     this.orderStaffViewDao = orderStaffViewDao;
   }
 
   @GetMapping("orders/waiting")
-  public List<OrderStaffView> getOrders() {
+  public List<StaffOrderView> getOrders() {
     return orderStaffViewDao.selectForStaff();
   }
 

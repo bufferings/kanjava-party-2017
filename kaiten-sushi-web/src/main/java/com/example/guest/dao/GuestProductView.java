@@ -7,15 +7,11 @@ import lombok.ToString;
 
 @Entity
 @ToString
-public class ProductGuestView {
+public class GuestProductView {
 
   @Id
   public String productId;
 
   public String productName;
-
-  public Integer stockQuantity;
-
-  public Integer version;
 
 }

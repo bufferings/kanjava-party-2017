@@ -7,7 +7,8 @@ SELECT
   ,productName
   ,quantity
   ,orderDateTime
+  ,delivered
 FROM
-  OrderStaffView
-ORDER BY
-  orderDateTime ASC
+  GuestOrderView
+WHERE
+  orderId = /* orderId */1

@@ -9,7 +9,7 @@ SELECT
   ,orderDateTime
   ,delivered
 FROM
-  OrderGuestView
+  GuestOrderView
 WHERE
   orderGuestId = /* orderGuestId */1
 ORDER BY

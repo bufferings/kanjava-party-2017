@@ -1,9 +1,7 @@
 SELECT
   productId
   ,productName
-  ,stockQuantity
-  ,version
 FROM
-  Product
+  GuestProductView
 WHERE
   productId = /* productId */1

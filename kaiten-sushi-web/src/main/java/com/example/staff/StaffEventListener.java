@@ -10,16 +10,16 @@ import com.example.order.domain.event.OrderDeliveredEvent;
 import com.example.order.domain.event.OrderGroupClosedEvent;
 import com.example.order.domain.event.StoredEvent;
 import com.example.staff.config.StaffKafkaConsumerConfig;
-import com.example.staff.dao.OrderStaffView;
-import com.example.staff.dao.OrderStaffViewDao;
+import com.example.staff.dao.StaffOrderView;
+import com.example.staff.dao.StaffOrderViewDao;
 
 @Component
 public class StaffEventListener {
 
-  private OrderStaffViewDao orderStaffViewDao;
+  private StaffOrderViewDao orderStaffViewDao;
 
   @Autowired
-  public StaffEventListener(OrderStaffViewDao orderStaffViewDao) {
+  public StaffEventListener(StaffOrderViewDao orderStaffViewDao) {
     this.orderStaffViewDao = orderStaffViewDao;
   }
 
@@ -36,12 +36,12 @@ public class StaffEventListener {
   }
 
   private void handleOrderCreatedEvent(OrderCreatedEvent event) {
-    OrderStaffView staffView = createStaffView(event);
+    StaffOrderView staffView = createStaffView(event);
     orderStaffViewDao.insert(staffView);
   }
 
-  private OrderStaffView createStaffView(OrderCreatedEvent event) {
-    OrderStaffView view = new OrderStaffView();
+  private StaffOrderView createStaffView(OrderCreatedEvent event) {
+    StaffOrderView view = new StaffOrderView();
     view.orderId = event.orderId;
     view.orderGroupId = event.orderGroupId;
     view.orderGuestId = event.orderGuestId;
@@ -54,7 +54,7 @@ public class StaffEventListener {
   }
 
   private void handleOrderDeliveredEvent(OrderDeliveredEvent event) {
-    OrderStaffView staffView = orderStaffViewDao.selectById(event.orderId);
+    StaffOrderView staffView = orderStaffViewDao.selectById(event.orderId);
     orderStaffViewDao.delete(staffView);
   }
 

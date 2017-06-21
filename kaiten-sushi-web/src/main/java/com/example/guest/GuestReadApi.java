@@ -9,39 +9,39 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.guest.dao.OrderGuestView;
-import com.example.guest.dao.OrderGuestViewDao;
-import com.example.guest.dao.ProductGuestView;
-import com.example.guest.dao.ProductGuestViewDao;
+import com.example.guest.dao.GuestOrderView;
+import com.example.guest.dao.GuestOrderViewDao;
+import com.example.guest.dao.GuestProductView;
+import com.example.guest.dao.GuestProductViewDao;
 import com.example.security.LoginUser;
 
 @RestController
 @RequestMapping("guest/api")
 public class GuestReadApi {
 
-  private ProductGuestViewDao productGuestViewDao;
+  private GuestProductViewDao guestProductViewDao;
 
-  private OrderGuestViewDao orderGuestViewDao;
+  private GuestOrderViewDao guestOrderViewDao;
 
   @Autowired
-  public GuestReadApi(ProductGuestViewDao productGuestViewDao, OrderGuestViewDao orderGuestViewDao) {
-    this.productGuestViewDao = productGuestViewDao;
-    this.orderGuestViewDao = orderGuestViewDao;
+  public GuestReadApi(GuestProductViewDao guestProductViewDao, GuestOrderViewDao guestOrderViewDao) {
+    this.guestProductViewDao = guestProductViewDao;
+    this.guestOrderViewDao = guestOrderViewDao;
   }
 
   @GetMapping("products")
-  public List<ProductGuestView> getProducts() {
-    return productGuestViewDao.selectAll();
+  public List<GuestProductView> products() {
+    return guestProductViewDao.selectAll();
   }
 
   @GetMapping("products/{productId}")
-  public ProductGuestView getProduct(@PathVariable("productId") String productId) {
-    return productGuestViewDao.selectById(productId);
+  public GuestProductView product(@PathVariable("productId") String productId) {
+    return guestProductViewDao.selectById(productId);
   }
 
   @GetMapping("orders")
-  public List<OrderGuestView> getOrders(@AuthenticationPrincipal LoginUser loginUser) {
-    return orderGuestViewDao.selectByGuestId(loginUser.getId());
+  public List<GuestOrderView> orders(@AuthenticationPrincipal LoginUser loginUser) {
+    return guestOrderViewDao.selectByGuestId(loginUser.getId());
   }
 
 }

@@ -1,4 +1,4 @@
-package com.example.guest.dao;
+package com.example.staff.dao;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @Entity
 @ToString
-public class OrderGuestView {
+public class StaffOrderView {
 
   @Id
   public String orderId;
@@ -27,7 +27,5 @@ public class OrderGuestView {
   public Integer quantity;
 
   public LocalDateTime orderDateTime;
-
-  public OrderDelivered delivered;
 
 }

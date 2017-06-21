@@ -1,4 +1,4 @@
-package com.example.staff.dao;
+package com.example.guest.dao;
 
 import java.util.List;
 
@@ -13,22 +13,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @ConfigAutowireable
 @Dao
-public interface OrderStaffViewDao {
+public interface GuestOrderViewDao {
 
   @Insert
-  int insert(OrderStaffView orderStaffView);
+  int insert(GuestOrderView guestOrderView);
 
   @Update
-  int update(OrderStaffView orderStaffView);
+  int update(GuestOrderView guestOrderView);
 
   @Select
-  OrderStaffView selectById(String orderId);
+  GuestOrderView selectById(String orderId);
 
   @Select
-  List<OrderStaffView> selectForStaff();
-
-  @Delete
-  int delete(OrderStaffView orderStaffView);
+  List<GuestOrderView> selectByGuestId(Integer orderGuestId);
 
   @Delete(sqlFile = true)
   int deleteByGroupId(String orderGroupId);

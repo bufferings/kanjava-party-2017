@@ -8,8 +8,6 @@ SELECT
   ,quantity
   ,orderDateTime
 FROM
-  OrderStaffView
-WHERE
-  orderId = /* orderId */1
+  StaffOrderView
 ORDER BY
   orderDateTime ASC

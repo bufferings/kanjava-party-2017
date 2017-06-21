@@ -5,9 +5,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.example.guest.config.GuestKafkaConsumerConfig;
+import com.example.guest.dao.GuestOrderView;
+import com.example.guest.dao.GuestOrderViewDao;
 import com.example.guest.dao.OrderDelivered;
-import com.example.guest.dao.OrderGuestView;
-import com.example.guest.dao.OrderGuestViewDao;
 import com.example.order.domain.event.DomainEvent;
 import com.example.order.domain.event.OrderCreatedEvent;
 import com.example.order.domain.event.OrderDeliveredEvent;
@@ -17,11 +17,11 @@ import com.example.order.domain.event.StoredEvent;
 @Component
 public class GuestEventListener {
 
-  private OrderGuestViewDao orderGuestViewDao;
+  private GuestOrderViewDao guestOrderViewDao;
 
   @Autowired
-  public GuestEventListener(OrderGuestViewDao orderGuestViewDao) {
-    this.orderGuestViewDao = orderGuestViewDao;
+  public GuestEventListener(GuestOrderViewDao guestOrderViewDao) {
+    this.guestOrderViewDao = guestOrderViewDao;
   }
 
   @KafkaListener(topics = "topic1", containerFactory = GuestKafkaConsumerConfig.CONTAINER_NAME)
@@ -37,12 +37,12 @@ public class GuestEventListener {
   }
 
   private void handleOrderCreatedEvent(OrderCreatedEvent event) {
-    OrderGuestView guestView = createGuestView(event);
-    orderGuestViewDao.insert(guestView);
+    GuestOrderView guestView = createGuestView(event);
+    guestOrderViewDao.insert(guestView);
   }
 
-  private OrderGuestView createGuestView(OrderCreatedEvent event) {
-    OrderGuestView view = new OrderGuestView();
+  private GuestOrderView createGuestView(OrderCreatedEvent event) {
+    GuestOrderView view = new GuestOrderView();
     view.orderId = event.orderId;
     view.orderGroupId = event.orderGroupId;
     view.orderGuestId = event.orderGuestId;
@@ -56,12 +56,12 @@ public class GuestEventListener {
   }
 
   private void handleOrderDeliveredEvent(OrderDeliveredEvent event) {
-    OrderGuestView guestView = orderGuestViewDao.selectById(event.orderId);
+    GuestOrderView guestView = guestOrderViewDao.selectById(event.orderId);
     guestView.delivered = OrderDelivered.DELIVERED;
-    orderGuestViewDao.update(guestView);
+    guestOrderViewDao.update(guestView);
   }
 
   private void handleOrderGroupClosedEvent(OrderGroupClosedEvent event) {
-    orderGuestViewDao.deleteByGroupId(event.orderGroupId);
+    guestOrderViewDao.deleteByGroupId(event.orderGroupId);
   }
 }
