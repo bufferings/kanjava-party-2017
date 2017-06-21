@@ -62,7 +62,7 @@ public class OrderGroup {
 
   public void checkout() {
     Assert.state(canCheckout());
-    this.setStatus(OrderGroupStatus.CHECKOUT);
+    this.setStatus(OrderGroupStatus.CLOSED);
   }
 
   public boolean canDeliverOrder(OrderId orderId) {
@@ -88,15 +88,6 @@ public class OrderGroup {
       }
     }
     return null;
-  }
-
-  public boolean canClose() {
-    return this.getStatus() == OrderGroupStatus.CHECKOUT;
-  }
-
-  public void close() {
-    Assert.state(canClose());
-    this.setStatus(OrderGroupStatus.CLOSED);
   }
 
   public boolean isNew() {

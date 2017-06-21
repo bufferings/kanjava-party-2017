@@ -107,8 +107,6 @@ public class DomaOrderRepository implements OrderRepository {
     if (status == 1) {
       return OrderGroupStatus.OPENED;
     } else if (status == 2) {
-      return OrderGroupStatus.CHECKOUT;
-    } else if (status == 3) {
       return OrderGroupStatus.CLOSED;
     } else {
       throw new RuntimeException("Unknown status.");
@@ -145,10 +143,8 @@ public class DomaOrderRepository implements OrderRepository {
     switch (status) {
     case OPENED:
       return 1;
-    case CHECKOUT:
-      return 2;
     case CLOSED:
-      return 3;
+      return 2;
     default:
       throw new RuntimeException("Unknown status.");
     }

@@ -1,7 +1,5 @@
 package com.example.order.usecase;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -9,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.example.order.domain.event.OrderDeliveredEvent;
-import com.example.order.domain.event.OrderGroupClosedEvent;
+import com.example.order.domain.event.OrderGroupCheckedOutEvent;
 import com.example.order.domain.event.StoredEvent;
 import com.example.order.domain.model.OrderAddService;
 import com.example.order.domain.model.order.OrderGroup;
@@ -49,27 +47,16 @@ public class OrderUsecase {
     Assert.notNull(orderGroup);
     orderGroup.checkout();
     orderRepository.save(orderGroup);
-    orderGroup.incrementVersion();
+
+    kafkaTemplate.send("topic1", new StoredEvent(new OrderGroupCheckedOutEvent(orderGroup.getId().getValue())));
   }
 
-  public void deliver(String orderGroupId, String orderId) {
+  public void deliverOrder(String orderGroupId, String orderId) {
     OrderGroup orderGroup = orderRepository.orderGroupOfId(new OrderGroupId(orderGroupId));
     orderGroup.deliverOrder(new OrderId(orderId));
     orderRepository.save(orderGroup);
 
     kafkaTemplate.send("topic1", new StoredEvent(new OrderDeliveredEvent(orderGroupId, orderId)));
-  }
-
-  public void close(String orderGroupId) {
-    OrderGroup orderGroup = orderRepository.orderGroupOfId(new OrderGroupId(orderGroupId));
-    orderGroup.close();
-    orderRepository.save(orderGroup);
-
-    kafkaTemplate.send("topic1", new StoredEvent(new OrderGroupClosedEvent(orderGroupId)));
-  }
-
-  public List<OrderGroup> checkoutOrderGroups() {
-    return orderRepository.checkoutOrderGroups();
   }
 
 }

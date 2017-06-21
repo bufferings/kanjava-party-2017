@@ -11,7 +11,7 @@ import com.example.guest.dao.OrderDelivered;
 import com.example.order.domain.event.DomainEvent;
 import com.example.order.domain.event.OrderCreatedEvent;
 import com.example.order.domain.event.OrderDeliveredEvent;
-import com.example.order.domain.event.OrderGroupClosedEvent;
+import com.example.order.domain.event.OrderGroupCheckedOutEvent;
 import com.example.order.domain.event.StoredEvent;
 
 @Component
@@ -31,8 +31,8 @@ public class GuestEventListener {
       handleOrderCreatedEvent((OrderCreatedEvent) event);
     } else if (event instanceof OrderDeliveredEvent) {
       handleOrderDeliveredEvent((OrderDeliveredEvent) event);
-    } else if (event instanceof OrderGroupClosedEvent) {
-      handleOrderGroupClosedEvent((OrderGroupClosedEvent) event);
+    } else if (event instanceof OrderGroupCheckedOutEvent) {
+      handleOrderGroupCheckedOutEvent((OrderGroupCheckedOutEvent) event);
     }
   }
 
@@ -61,7 +61,7 @@ public class GuestEventListener {
     guestOrderViewDao.update(guestView);
   }
 
-  private void handleOrderGroupClosedEvent(OrderGroupClosedEvent event) {
+  private void handleOrderGroupCheckedOutEvent(OrderGroupCheckedOutEvent event) {
     guestOrderViewDao.deleteByGroupId(event.orderGroupId);
   }
 }
