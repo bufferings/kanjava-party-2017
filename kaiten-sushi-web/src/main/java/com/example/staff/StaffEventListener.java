@@ -1,20 +1,25 @@
 package com.example.staff;
 
+import java.time.LocalDateTime;
+
+import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.util.Utf8;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import com.example.order.domain.event.DomainEvent;
-import com.example.order.domain.event.OrderCheckedOutEvent;
-import com.example.order.domain.event.OrderItemCreatedEvent;
-import com.example.order.domain.event.OrderItemDeliveredEvent;
-import com.example.order.domain.event.StoredEvent;
 import com.example.staff.config.StaffKafkaConsumerConfig;
 import com.example.staff.dao.StaffOrderItem;
 import com.example.staff.dao.StaffOrderItemDao;
 
 @Component
 public class StaffEventListener {
+
+  private static final String ORDER_ITEM_CREATED_EVENT_SCHEMA_NAME = "OrderItemCreatedEvent";
+
+  private static final String ORDER_ITEM_DELIVERED_EVENT_SCHEMA_NAME = "OrderItemDeliveredEvent";
+
+  private static final String ORDER_CHECKED_OUT_EVENT_SCHEMA_NAME = "OrderCheckedOutEvent";
 
   private StaffOrderItemDao staffOrderItemDao;
 
@@ -23,40 +28,40 @@ public class StaffEventListener {
     this.staffOrderItemDao = staffOrderItemDao;
   }
 
-  @KafkaListener(topics = "topic1", containerFactory = StaffKafkaConsumerConfig.CONTAINER_NAME)
-  public void listen(StoredEvent storedEvent) {
-    DomainEvent event = storedEvent.toDomainEvent();
-    if (event instanceof OrderItemCreatedEvent) {
-      handleOrderItemCreatedEvent((OrderItemCreatedEvent) event);
-    } else if (event instanceof OrderItemDeliveredEvent) {
-      handleOrderItemDeliveredEvent((OrderItemDeliveredEvent) event);
-    } else if (event instanceof OrderCheckedOutEvent) {
-      handleOrderCheckedOutEvent((OrderCheckedOutEvent) event);
+  @KafkaListener(topics = "order-topic", containerFactory = StaffKafkaConsumerConfig.CONTAINER_NAME)
+  public void listen(GenericRecord event) {
+    String schemaName = event.getSchema().getFullName();
+    if (ORDER_ITEM_CREATED_EVENT_SCHEMA_NAME.equals(schemaName)) {
+      handleOrderItemCreatedEvent(event);
+    } else if (ORDER_ITEM_DELIVERED_EVENT_SCHEMA_NAME.equals(schemaName)) {
+      handleOrderItemDeliveredEvent(event);
+    } else if (ORDER_CHECKED_OUT_EVENT_SCHEMA_NAME.equals(schemaName)) {
+      handleOrderCheckedOutEvent(event);
     }
   }
 
-  private void handleOrderItemCreatedEvent(OrderItemCreatedEvent event) {
+  private void handleOrderItemCreatedEvent(GenericRecord event) {
     StaffOrderItem staffView = createStaffOrderItem(event);
     staffOrderItemDao.insert(staffView);
   }
 
-  private StaffOrderItem createStaffOrderItem(OrderItemCreatedEvent event) {
+  private StaffOrderItem createStaffOrderItem(GenericRecord event) {
     StaffOrderItem view = new StaffOrderItem();
-    view.orderItemId = event.orderItemId;
-    view.orderGuestId = event.orderGuestId;
-    view.orderGuestName = event.orderGuestName;
-    view.productId = event.productId;
-    view.productName = event.productName;
-    view.quantity = event.quantity;
-    view.orderedOn = event.orderedOn;
+    view.orderItemId = ((Utf8) event.get("orderItemId")).toString();
+    view.orderGuestId = (Integer) event.get("orderGuestId");
+    view.orderGuestName = ((Utf8) event.get("orderGuestName")).toString();
+    view.productId = ((Utf8) event.get("productId")).toString();
+    view.productName = ((Utf8) event.get("productName")).toString();
+    view.quantity = (Integer) event.get("quantity");
+    view.orderedOn = LocalDateTime.parse(((Utf8) event.get("orderedOn")).toString());
     return view;
   }
 
-  private void handleOrderItemDeliveredEvent(OrderItemDeliveredEvent event) {
-    staffOrderItemDao.deleteByOrderItemId(event.orderItemId);
+  private void handleOrderItemDeliveredEvent(GenericRecord event) {
+    staffOrderItemDao.deleteByOrderItemId(((Utf8) event.get("orderItemId")).toString());
   }
 
-  private void handleOrderCheckedOutEvent(OrderCheckedOutEvent event) {
-    staffOrderItemDao.deleteByOrderGuestId(event.orderGuestId);
+  private void handleOrderCheckedOutEvent(GenericRecord event) {
+    staffOrderItemDao.deleteByOrderGuestId((Integer) event.get("orderGuestId"));
   }
 }

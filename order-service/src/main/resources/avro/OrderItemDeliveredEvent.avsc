@@ -1,0 +1,10 @@
+{
+  "name": "OrderItemDeliveredEvent",
+  "type": "record",
+  "fields": [
+    {"name": "orderItemId", "type": "string"},
+    {"name": "deliveryPersonId", "type": "int"},
+    {"name": "deliveryPersonName", "type": "string"},
+    {"name": "deliveredOn",  "type": "string"}
+  ]
+}

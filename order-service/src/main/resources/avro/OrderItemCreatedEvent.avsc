@@ -1,5 +1,5 @@
 {
-  "name": "OrderCreatedEvent",
+  "name": "OrderItemCreatedEvent",
   "type": "record",
   "fields": [
     {"name": "orderGroupId", "type": "string"},
@@ -9,6 +9,6 @@
     {"name": "productId", "type": "string"},
     {"name": "productName", "type": "string"},
     {"name": "quantity", "type": "int"},
-    {"name": "orderedOn", "type": "date"}
+    {"name": "orderedOn",  "type": "string"}
   ]
 }

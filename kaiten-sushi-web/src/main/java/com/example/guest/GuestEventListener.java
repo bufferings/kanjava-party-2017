@@ -1,21 +1,26 @@
 package com.example.guest;
 
+import java.time.LocalDateTime;
+
+import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.util.Utf8;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import com.example.guest.config.GuestKafkaConsumerConfig;
+import com.example.guest.config.GuestKafkaClientConfig;
 import com.example.guest.dao.GuestOrderItem;
 import com.example.guest.dao.GuestOrderItemDao;
 import com.example.guest.dao.OrderItemDelivered;
-import com.example.order.domain.event.DomainEvent;
-import com.example.order.domain.event.OrderCheckedOutEvent;
-import com.example.order.domain.event.OrderItemCreatedEvent;
-import com.example.order.domain.event.OrderItemDeliveredEvent;
-import com.example.order.domain.event.StoredEvent;
 
 @Component
 public class GuestEventListener {
+
+  private static final String ORDER_ITEM_CREATED_EVENT_SCHEMA_NAME = "OrderItemCreatedEvent";
+
+  private static final String ORDER_ITEM_DELIVERED_EVENT_SCHEMA_NAME = "OrderItemDeliveredEvent";
+
+  private static final String ORDER_CHECKED_OUT_EVENT_SCHEMA_NAME = "OrderCheckedOutEvent";
 
   private GuestOrderItemDao guestOrderItemDao;
 
@@ -24,46 +29,47 @@ public class GuestEventListener {
     this.guestOrderItemDao = guestOrderItemDao;
   }
 
-  @KafkaListener(topics = "topic1", containerFactory = GuestKafkaConsumerConfig.CONTAINER_NAME)
-  public void listen(StoredEvent storedEvent) {
-    DomainEvent event = storedEvent.toDomainEvent();
-    if (event instanceof OrderItemCreatedEvent) {
-      handleOrderItemCreatedEvent((OrderItemCreatedEvent) event);
-    } else if (event instanceof OrderItemDeliveredEvent) {
-      handleOrderItemDeliveredEvent((OrderItemDeliveredEvent) event);
-    } else if (event instanceof OrderCheckedOutEvent) {
-      handleOrderCheckedOutEvent((OrderCheckedOutEvent) event);
+  @KafkaListener(topics = "order-topic", containerFactory = GuestKafkaClientConfig.CONTAINER_NAME)
+  public void listen(GenericRecord event) {
+    String schemaName = event.getSchema().getFullName();
+    if (ORDER_ITEM_CREATED_EVENT_SCHEMA_NAME.equals(schemaName)) {
+      handleOrderItemCreatedEvent(event);
+    } else if (ORDER_ITEM_DELIVERED_EVENT_SCHEMA_NAME.equals(schemaName)) {
+      handleOrderItemDeliveredEvent(event);
+    } else if (ORDER_CHECKED_OUT_EVENT_SCHEMA_NAME.equals(schemaName)) {
+      handleOrderCheckedOutEvent(event);
     }
   }
 
-  private void handleOrderItemCreatedEvent(OrderItemCreatedEvent event) {
+  private void handleOrderItemCreatedEvent(GenericRecord event) {
     GuestOrderItem guestView = createGuestOrderItem(event);
     guestOrderItemDao.insert(guestView);
   }
 
-  private GuestOrderItem createGuestOrderItem(OrderItemCreatedEvent event) {
+  private GuestOrderItem createGuestOrderItem(GenericRecord event) {
     GuestOrderItem view = new GuestOrderItem();
-    view.orderItemId = event.orderItemId;
-    view.orderGuestId = event.orderGuestId;
-    view.orderGuestName = event.orderGuestName;
-    view.productId = event.productId;
-    view.productName = event.productName;
-    view.quantity = event.quantity;
-    view.orderedOn = event.orderedOn;
+    view.orderItemId = ((Utf8) event.get("orderItemId")).toString();
+    view.orderGuestId = (Integer) event.get("orderGuestId");
+    view.orderGuestName = ((Utf8) event.get("orderGuestName")).toString();
+    view.productId = ((Utf8) event.get("productId")).toString();
+    view.productName = ((Utf8) event.get("productName")).toString();
+    view.quantity = (Integer) event.get("quantity");
+    view.orderedOn = LocalDateTime.parse(((Utf8) event.get("orderedOn")).toString());
     view.delivered = OrderItemDelivered.NOT_DELIVERED;
     return view;
   }
 
-  private void handleOrderItemDeliveredEvent(OrderItemDeliveredEvent event) {
-    GuestOrderItem guestView = guestOrderItemDao.selectByOrderItemId(event.orderItemId);
+  private void handleOrderItemDeliveredEvent(GenericRecord event) {
+    String orderItemId = ((Utf8) event.get("orderItemId")).toString();
+    GuestOrderItem guestView = guestOrderItemDao.selectByOrderItemId(orderItemId);
     guestView.delivered = OrderItemDelivered.DELIVERED;
-    guestView.deliveryPersonId = event.deliveryPersonId;
-    guestView.deliveryPersonName = event.deliveryPersonName;
-    guestView.deliveredOn = event.deliveredOn;
+    guestView.deliveryPersonId = (Integer) event.get("deliveryPersonId");
+    guestView.deliveryPersonName = ((Utf8) event.get("deliveryPersonName")).toString();
+    guestView.deliveredOn = LocalDateTime.parse(((Utf8) event.get("deliveredOn")).toString());
     guestOrderItemDao.update(guestView);
   }
 
-  private void handleOrderCheckedOutEvent(OrderCheckedOutEvent event) {
-    guestOrderItemDao.deleteByOrderGuestId(event.orderGuestId);
+  private void handleOrderCheckedOutEvent(GenericRecord event) {
+    guestOrderItemDao.deleteByOrderGuestId((Integer) event.get("orderGuestId"));
   }
 }

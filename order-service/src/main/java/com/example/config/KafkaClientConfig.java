@@ -1,37 +1,48 @@
 package com.example.config;
 
-//@Configuration
-//@EnableKafka
-//@EnableKafkaStreams
+import java.util.Map;
+
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.ProducerFactory;
+
+import com.example.myserdes.KafkaAvroSerializerWithSchemaName;
+
+@Configuration
+@EnableKafka
+// @EnableKafkaStreams
 public class KafkaClientConfig {
-  //
-  // private static final String SCHEMA_REGISTRY_URL_KEY =
-  // "schema.registry.url";
-  //
-  // private final String schemaRegistryUrl;
-  //
-  // private final KafkaProperties properties;
-  //
-  // @Autowired
-  // public KafkaClientConfig(@Value("${schema.registry.url}") String
-  // schemaRegistryUrl, KafkaProperties properties) {
-  // this.schemaRegistryUrl = schemaRegistryUrl;
-  // this.properties = properties;
-  // }
-  //
-  // @Bean
-  // public ProducerFactory<?, ?> kafkaProducerFactory() {
-  // Map<String, Object> producerProperties =
-  // properties.buildProducerProperties();
-  // // For Avro
-  // producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-  // KafkaAvroSerializerWithSchemaName.class);
-  // producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-  // KafkaAvroSerializerWithSchemaName.class);
-  // // Schema Registry
-  // producerProperties.put(SCHEMA_REGISTRY_URL_KEY, schemaRegistryUrl);
-  // return new DefaultKafkaProducerFactory<Object, Object>(producerProperties);
-  // }
+
+  private static final String SCHEMA_REGISTRY_URL_KEY = "schema.registry.url";
+
+  private final String schemaRegistryUrl;
+
+  private final KafkaProperties properties;
+
+  @Autowired
+  public KafkaClientConfig(@Value("${schema.registry.url}") String schemaRegistryUrl, KafkaProperties properties) {
+    this.schemaRegistryUrl = schemaRegistryUrl;
+    this.properties = properties;
+  }
+
+  @Bean
+  public ProducerFactory<?, ?> kafkaProducerFactory() {
+    Map<String, Object> producerProperties = properties.buildProducerProperties();
+    // For Avro
+    producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+    producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializerWithSchemaName.class);
+    // Schema Registry
+    producerProperties.put(SCHEMA_REGISTRY_URL_KEY, schemaRegistryUrl);
+    return new DefaultKafkaProducerFactory<Object, Object>(producerProperties);
+  }
+
   //
   // @Bean
   // public ConsumerFactory<?, ?> kafkaConsumerFactory() {

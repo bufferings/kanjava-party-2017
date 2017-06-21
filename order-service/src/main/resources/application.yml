@@ -7,16 +7,13 @@ spring:
     username: root
     password: password
     driverClassName: com.mysql.jdbc.Driver
-  kafka:
-    producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
-doma:
-  dialect: MYSQL
 
 schema:
   registry:
     url: http://localhost:8081
+
+doma:
+  dialect: MYSQL
 
 security:
   oauth2:

@@ -1,12 +1,18 @@
 package com.example.order.domain.model;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.example.order.domain.event.OrderItemCreatedEvent;
-import com.example.order.domain.event.StoredEvent;
 import com.example.order.domain.model.order.OrderGroup;
 import com.example.order.domain.model.order.OrderGroupId;
 import com.example.order.domain.model.order.OrderGuestId;
@@ -26,14 +32,25 @@ public class OrderAddService {
 
   private ProductRepository productRepository;
 
-  private KafkaTemplate<String, StoredEvent> kafkaTemplate;
+  private KafkaTemplate<String, GenericRecord> kafkaTemplate;
+
+  private Schema orderItemCreatedEventSchema;
 
   @Autowired
   public OrderAddService(OrderRepository orderRepository, ProductRepository productRepository,
-      KafkaTemplate<String, StoredEvent> kafkaTemplate) {
+      KafkaTemplate<String, GenericRecord> kafkaTemplate,
+      @Value(value = "classpath:avro/OrderItemCreatedEvent.avsc") Resource orderItemCreatedEventSchemaFile) {
     this.orderRepository = orderRepository;
     this.productRepository = productRepository;
     this.kafkaTemplate = kafkaTemplate;
+
+    try {
+      try (InputStream is = orderItemCreatedEventSchemaFile.getInputStream()) {
+        orderItemCreatedEventSchema = new Schema.Parser().parse(is);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public void addOrder(OrderGuestId guestId, OrderGuestName guestName, ProductId productId, OrderQuantity quantity) {
@@ -54,10 +71,16 @@ public class OrderAddService {
     orderRepository.save(orderGroup);
     productRepository.save(product);
 
-    kafkaTemplate.send("topic1",
-        new StoredEvent(new OrderItemCreatedEvent(newOrder.getId().getValue(), orderGroup.getId().getValue(),
-            orderGroup.getOrderGuestId().getValue(), orderGroup.getOrderGuestName().getValue(),
-            product.getId().getValue(), product.getName().getValue(), newOrder.getQuantity().getValue(),
-            newOrder.getOrderedOn().getValue())));
+    GenericRecord orderItemCreatedEvent = new GenericData.Record(orderItemCreatedEventSchema);
+    orderItemCreatedEvent.put("orderGroupId", orderGroup.getId().getValue());
+    orderItemCreatedEvent.put("orderItemId", newOrder.getId().getValue());
+    orderItemCreatedEvent.put("orderGuestId", orderGroup.getOrderGuestId().getValue());
+    orderItemCreatedEvent.put("orderGuestName", orderGroup.getOrderGuestName().getValue());
+    orderItemCreatedEvent.put("productId", product.getId().getValue());
+    orderItemCreatedEvent.put("productName", product.getName().getValue());
+    orderItemCreatedEvent.put("quantity", newOrder.getQuantity().getValue());
+    orderItemCreatedEvent.put("orderedOn", newOrder.getOrderedOn().getValue().toString());
+    kafkaTemplate.send("order-topic", orderItemCreatedEvent);
+
   }
 }

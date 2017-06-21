@@ -1,0 +1,7 @@
+{
+  "name": "OrderCheckedOutEvent",
+  "type": "record",
+  "fields": [
+    {"name": "orderGuestId", "type": "int"}
+  ]
+}
