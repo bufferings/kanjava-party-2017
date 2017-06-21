@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.guest.dao.order.OrderGuestView;
-import com.example.guest.dao.order.OrderGuestViewDao;
-import com.example.guest.dao.product.ProductGuestView;
-import com.example.guest.dao.product.ProductGuestViewDao;
+import com.example.guest.dao.OrderGuestView;
+import com.example.guest.dao.OrderGuestViewDao;
+import com.example.guest.dao.ProductGuestView;
+import com.example.guest.dao.ProductGuestViewDao;
 import com.example.security.LoginUser;
 
 @RestController

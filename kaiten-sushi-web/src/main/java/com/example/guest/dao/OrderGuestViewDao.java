@@ -1,4 +1,4 @@
-package com.example.guest.dao.order;
+package com.example.guest.dao;
 
 import java.util.List;
 

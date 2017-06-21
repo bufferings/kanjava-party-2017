@@ -1,4 +1,4 @@
-package com.example.guest.dao.product;
+package com.example.guest.dao;
 
 import org.seasar.doma.Entity;
 import org.seasar.doma.Id;
