@@ -1,9 +1,0 @@
-{
-  "name": "DifferentSchema",
-  "type": "record",
-  "fields": [
-    {"name": "id2",  "type": "long"},
-    {"name": "createdAt", "type": "string"},
-    {"name": "text2", "type": "string"}
-  ]
-}

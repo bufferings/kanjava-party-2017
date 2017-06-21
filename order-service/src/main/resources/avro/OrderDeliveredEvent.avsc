@@ -1,0 +1,11 @@
+{
+  "namespace": "com.example",
+  "name": "OrderDeliveredEvent",
+  "type": "record",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "orderId", "type": "string"},
+    {"name": "deliveryStaffId", "type": "int"},
+    {"name": "deliveryStaffName", "type": "string"}
+  ]
+}

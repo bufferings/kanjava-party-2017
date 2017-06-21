@@ -1,5 +1,12 @@
-{"properties": [{
-  "name": "schema.registry.url",
-  "type": "java.lang.String",
-  "description": "A description for 'schema.registry.url'"
-}]}
+{"properties": [
+  {
+    "name": "schema.registry.url",
+    "type": "java.lang.String",
+    "description": "A description for 'schema.registry.url'"
+  },
+  {
+    "name": "security.oauth2.resource.load-balanced",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.resource.load-balanced'"
+  }
+]}

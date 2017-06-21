@@ -2,11 +2,24 @@ server:
   port: 8182
 
 spring:
+  datasource:
+    url:  jdbc:mysql://localhost:3306/kjp2017-2?useSSL=false
+    username: root
+    password: password
+    driverClassName: com.mysql.jdbc.Driver
   kafka:
-    consumer:
-      group-id: foo
-      auto-offset-reset: latest
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+doma:
+  dialect: MYSQL
 
 schema:
   registry:
     url: http://localhost:8081
+
+security:
+  oauth2:
+    resource:
+      load-balanced: true
+      user-info-uri: http://user-service/me

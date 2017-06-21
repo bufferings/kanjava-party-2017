@@ -7,6 +7,10 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.order.domain.event.OrderCheckedOutEvent;
 import com.example.order.domain.event.OrderItemDeliveredEvent;
@@ -25,6 +29,7 @@ import com.example.order.domain.model.product.ProductId;
 
 @Service
 @Transactional
+@RestController
 public class OrderUsecase {
 
   private OrderRepository orderRepository;
@@ -41,21 +46,28 @@ public class OrderUsecase {
     this.kafkaTemplate = kafkaTemplate;
   }
 
-  public void addOrder(Integer guestId, String guestName, String productId, Integer quantity) {
-    orderAddService.addOrder(new OrderGuestId(guestId), new OrderGuestName(guestName), new ProductId(productId),
-        new OrderQuantity(quantity));
+  @PostMapping("order-items/add")
+  public void addOrder(@RequestParam("orderGuestId") Integer orderGuestId,
+      @RequestParam("orderGuestName") String orderGuestName, @RequestParam("productId") String productId,
+      @RequestParam("quantity") Integer quantity) {
+    orderAddService.addOrder(new OrderGuestId(orderGuestId), new OrderGuestName(orderGuestName),
+        new ProductId(productId), new OrderQuantity(quantity));
   }
 
-  public void checkout(Integer guestId) {
-    OrderGroup orderGroup = orderRepository.activeOrderGroupOf(new OrderGuestId(guestId));
+  @PostMapping("checkout")
+  public void checkout(@RequestParam("orderGuestId") Integer orderGuestId) {
+    OrderGroup orderGroup = orderRepository.activeOrderGroupOf(new OrderGuestId(orderGuestId));
     Assert.notNull(orderGroup);
     orderGroup.checkout();
     orderRepository.save(orderGroup);
 
-    kafkaTemplate.send("topic1", new StoredEvent(new OrderCheckedOutEvent(guestId)));
+    kafkaTemplate.send("topic1", new StoredEvent(new OrderCheckedOutEvent(orderGuestId)));
   }
 
-  public void deliverOrderItem(String orderItemId, Integer deliveryPersonId, String deliveryPersonName) {
+  @PostMapping("order-items/{orderItemId}/deliver")
+  public void deliverOrderItem(@PathVariable("orderItemId") String orderItemId,
+      @RequestParam("deiveryPersonId") Integer deliveryPersonId,
+      @RequestParam("deliveryPersonName") String deliveryPersonName) {
     OrderGroup orderGroup = orderRepository.orderGroupOfOrderItemId(new OrderItemId(orderItemId));
     DeliveryDateTime deliveredOn = new DeliveryDateTime(LocalDateTime.now());
     orderGroup.deliverOrderItem(new OrderItemId(orderItemId), new DeliveryPersonId(deliveryPersonId),

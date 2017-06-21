@@ -1,0 +1,14 @@
+{
+  "name": "OrderCreatedEvent",
+  "type": "record",
+  "fields": [
+    {"name": "orderGroupId", "type": "string"},
+    {"name": "orderItemId", "type": "string"},
+    {"name": "orderGuestId", "type": "int"},
+    {"name": "orderGuestName", "type": "string"},
+    {"name": "productId", "type": "string"},
+    {"name": "productName", "type": "string"},
+    {"name": "quantity", "type": "int"},
+    {"name": "orderedOn", "type": "date"}
+  ]
+}

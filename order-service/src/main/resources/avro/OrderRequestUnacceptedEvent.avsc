@@ -1,0 +1,9 @@
+{
+  "namespace": "com.example",
+  "name": "OrderRequestUnacceptedEvent",
+  "type": "record",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "orderId", "type": "string"}
+  ]
+}

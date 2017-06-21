@@ -1,0 +1,14 @@
+{
+  "namespace": "com.example",
+  "name": "OrderRequestedEvent",
+  "type": "record",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "orderId", "type": "string"},
+    {"name": "orderGuestId", "type": "int"},
+    {"name": "orderGuestName", "type": "string"},
+    {"name": "orderProductId", "type": "string"},
+    {"name": "orderProductName", "type": "string"},
+    {"name": "orderQuantity", "type": "int"}
+  ]
+}
