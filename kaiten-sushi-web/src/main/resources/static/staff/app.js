@@ -34,7 +34,7 @@ angular.module('staffApp', [ 'ngRoute', 'ngAnimate' ])
 })
 
 //
-.controller('OrderController', function($scope, $http, $location, orders) {
+.controller('OrderController', function($scope, $http, $location, $route, orders) {
   $scope.orders = orders.data;
   $scope.deliver = function(orderGroupId, orderId) {
     $http({
@@ -50,7 +50,10 @@ angular.module('staffApp', [ 'ngRoute', 'ngAnimate' ])
           break;
         }
       }
+      Materialize.toast('お届けしました。', 4000)
     }).error(function(data, status, headers, config) {
+      Materialize.toast('お届けできませんでした。', 4000)
+      $route.reload();
     });
   };
 });
