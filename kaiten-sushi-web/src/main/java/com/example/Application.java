@@ -40,4 +40,5 @@ public class Application {
   public OAuth2RestTemplate oAuth2RestTemplate(OAuth2ProtectedResourceDetails resource, OAuth2ClientContext context) {
     return new OAuth2RestTemplate(resource, context);
   }
+
 }

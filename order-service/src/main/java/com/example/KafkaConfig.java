@@ -1,4 +1,4 @@
-package com.example.config;
+package com.example;
 
 import java.util.Map;
 
@@ -18,7 +18,7 @@ import com.example.myserdes.KafkaAvroSerializerWithSchemaName;
 @Configuration
 @EnableKafka
 // @EnableKafkaStreams
-public class KafkaClientConfig {
+public class KafkaConfig {
 
   private static final String SCHEMA_REGISTRY_URL_KEY = "schema.registry.url";
 
@@ -27,7 +27,7 @@ public class KafkaClientConfig {
   private final KafkaProperties properties;
 
   @Autowired
-  public KafkaClientConfig(@Value("${schema.registry.url}") String schemaRegistryUrl, KafkaProperties properties) {
+  public KafkaConfig(@Value("${schema.registry.url}") String schemaRegistryUrl, KafkaProperties properties) {
     this.schemaRegistryUrl = schemaRegistryUrl;
     this.properties = properties;
   }

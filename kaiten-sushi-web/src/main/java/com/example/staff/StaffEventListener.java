@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import com.example.staff.config.StaffKafkaConsumerConfig;
 import com.example.staff.dao.StaffOrderItem;
 import com.example.staff.dao.StaffOrderItemDao;
 
@@ -28,7 +27,7 @@ public class StaffEventListener {
     this.staffOrderItemDao = staffOrderItemDao;
   }
 
-  @KafkaListener(topics = "order-topic", containerFactory = StaffKafkaConsumerConfig.CONTAINER_NAME)
+  @KafkaListener(topics = "order-topic", containerFactory = StaffKafkaConfig.CONTAINER_NAME)
   public void listen(GenericRecord event) {
     String schemaName = event.getSchema().getFullName();
     if (ORDER_ITEM_CREATED_EVENT_SCHEMA_NAME.equals(schemaName)) {

@@ -1,4 +1,4 @@
-package com.example.guest.config;
+package com.example.staff;
 
 import java.util.Map;
 
@@ -18,11 +18,11 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 
 @Configuration
-public class GuestKafkaClientConfig {
+public class StaffKafkaConfig {
 
-  public static final String CONTAINER_NAME = "guest-container";
+  public static final String CONTAINER_NAME = "staff-container";
 
-  public static final String GROUP_ID = "guest";
+  public static final String GROUP_ID = "staff";
 
   private static final String SCHEMA_REGISTRY_URL_KEY = "schema.registry.url";
 
@@ -31,7 +31,8 @@ public class GuestKafkaClientConfig {
   private final KafkaProperties properties;
 
   @Autowired
-  public GuestKafkaClientConfig(@Value("${schema.registry.url}") String schemaRegistryUrl, KafkaProperties properties) {
+  public StaffKafkaConfig(@Value("${schema.registry.url}") String schemaRegistryUrl,
+      KafkaProperties properties) {
     this.schemaRegistryUrl = schemaRegistryUrl;
     this.properties = properties;
   }
@@ -54,4 +55,5 @@ public class GuestKafkaClientConfig {
     consumerProperties.put(SCHEMA_REGISTRY_URL_KEY, schemaRegistryUrl);
     return new DefaultKafkaConsumerFactory<Object, Object>(consumerProperties);
   }
+
 }
