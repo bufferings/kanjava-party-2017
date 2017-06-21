@@ -21,11 +21,11 @@ angular.module('staffApp', [ 'ngRoute', 'ngAnimate' ])
 //
 .config(function($routeProvider) {
   $routeProvider.when('/', {
-    controller : 'OrderController',
-    templateUrl : 'view/orders.html',
+    controller : 'OrderItemController',
+    templateUrl : 'view/order-items.html',
     resolve : {
-      orders : function($http) {
-        return $http.get('/staff/api/orders/waiting');
+      orderItems : function($http) {
+        return $http.get('/staff/api/order-items/');
       }
     }
   }).otherwise({
@@ -34,19 +34,19 @@ angular.module('staffApp', [ 'ngRoute', 'ngAnimate' ])
 })
 
 //
-.controller('OrderController', function($scope, $http, $location, $route, orders) {
-  $scope.orders = orders.data;
-  $scope.deliver = function(orderGroupId, orderId) {
+.controller('OrderItemController', function($scope, $http, $location, $route, orderItems) {
+  $scope.orderItems = orderItems.data;
+  $scope.deliver = function(orderItemId) {
     $http({
       method : 'POST',
-      url : '/staff/api/order-groups/' + orderGroupId + '/' + orderId + '/deliver',
+      url : '/staff/api/order-items/' + orderItemId + '/deliver',
       headers : {
         'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
       }
     }).success(function(data, status, headers, config) {
-      for (var i = 0, len = $scope.orders.length; i < len; i++) {
-        if ($scope.orders[i].orderId === orderId) {
-          $scope.orders.splice(i, 1);
+      for (var i = 0, len = $scope.orderItems.length; i < len; i++) {
+        if ($scope.orderItems[i].orderItemId === orderItemId) {
+          $scope.orderItems.splice(i, 1);
           break;
         }
       }

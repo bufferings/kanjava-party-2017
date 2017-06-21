@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class OrderCreatedEvent implements DomainEvent {
+public class OrderItemCreatedEvent implements DomainEvent {
 
-  public final String orderId;
+  public final String orderItemId;
 
   public final String orderGroupId;
 
@@ -21,6 +21,6 @@ public class OrderCreatedEvent implements DomainEvent {
 
   public final Integer quantity;
 
-  public final LocalDateTime orderDateTime;
+  public final LocalDateTime orderedOn;
 
 }

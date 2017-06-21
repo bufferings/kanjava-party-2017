@@ -13,24 +13,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @ConfigAutowireable
 @Dao
-public interface StaffOrderViewDao {
+public interface StaffOrderItemDao {
 
   @Insert
-  int insert(StaffOrderView staffOrderView);
+  int insert(StaffOrderItem staffOrderItem);
 
   @Update
-  int update(StaffOrderView staffOrderView);
+  int update(StaffOrderItem staffOrderItem);
 
   @Select
-  StaffOrderView selectById(String orderId);
+  StaffOrderItem selectByOrderItemId(String orderItemId);
 
   @Select
-  List<StaffOrderView> selectForStaff();
-
-  @Delete
-  int delete(StaffOrderView staffOrderView);
+  List<StaffOrderItem> selectForStaff();
 
   @Delete(sqlFile = true)
-  int deleteByGroupId(String orderGroupId);
+  int deleteByOrderItemId(String orderItemId);
+
+  @Delete(sqlFile = true)
+  int deleteByOrderGuestId(Integer orderGuestId);
 
 }

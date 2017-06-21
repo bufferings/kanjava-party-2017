@@ -21,7 +21,7 @@ public class GuestWriteApi {
     this.orderUsecase = orderUsecase;
   }
 
-  @PostMapping("orders/add")
+  @PostMapping("order-items/add")
   public void addOrder(@AuthenticationPrincipal LoginUser loginUser, @RequestParam("productId") String productId,
       @RequestParam("quantity") int quantity) {
     orderUsecase.addOrder(loginUser.getId(), loginUser.getName(), productId, quantity);

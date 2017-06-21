@@ -14,15 +14,15 @@
     </thead>
 
     <tbody>
-      <tr ng-repeat="order in orders">
-        <td><img ng-src="/img/product/{{ order.productId }}.png"
+      <tr ng-repeat="orderItem in orderItems">
+        <td><img ng-src="/img/product/{{ orderItem.productId }}.png"
             class="responsive-img" width="100px"></img></td>
-        <td>{{ order.productName }}</td>
-        <td>{{ order.orderDateTime.hour | numberFixedLen:2 }}:{{ order.orderDateTime.minute | numberFixedLen:2 }}</td>
-        <td>{{ order.quantity }} 皿</td>
+        <td>{{ orderItem.productName }}</td>
+        <td>{{ orderItem.orderedOn.hour | numberFixedLen:2 }}:{{ orderItem.orderedOn.minute | numberFixedLen:2 }}</td>
+        <td>{{ orderItem.quantity }} 皿</td>
         <td>
-          <span ng-if="order.delivered == 'NOT_DELIVERED'">未</span>
-          <span ng-if="order.delivered == 'DELIVERED'">{{ order.deliveryPersonName }} さんが届けてくれました！</span>
+          <span ng-if="orderItem.delivered == 'NOT_DELIVERED'">未</span>
+          <span ng-if="orderItem.delivered == 'DELIVERED'">{{ orderItem.deliveryPersonName }} さんが届けてくれました！</span>
         </td>
       </tr>
     </tbody>

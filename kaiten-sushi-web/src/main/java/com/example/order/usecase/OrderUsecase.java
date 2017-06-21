@@ -8,18 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.example.order.domain.event.OrderDeliveredEvent;
-import com.example.order.domain.event.OrderGroupCheckedOutEvent;
+import com.example.order.domain.event.OrderCheckedOutEvent;
+import com.example.order.domain.event.OrderItemDeliveredEvent;
 import com.example.order.domain.event.StoredEvent;
 import com.example.order.domain.model.OrderAddService;
 import com.example.order.domain.model.order.DeliveryDateTime;
 import com.example.order.domain.model.order.DeliveryPersonId;
 import com.example.order.domain.model.order.DeliveryPersonName;
 import com.example.order.domain.model.order.OrderGroup;
-import com.example.order.domain.model.order.OrderGroupId;
 import com.example.order.domain.model.order.OrderGuestId;
 import com.example.order.domain.model.order.OrderGuestName;
-import com.example.order.domain.model.order.OrderId;
+import com.example.order.domain.model.order.OrderItemId;
 import com.example.order.domain.model.order.OrderQuantity;
 import com.example.order.domain.model.order.OrderRepository;
 import com.example.order.domain.model.product.ProductId;
@@ -53,18 +52,18 @@ public class OrderUsecase {
     orderGroup.checkout();
     orderRepository.save(orderGroup);
 
-    kafkaTemplate.send("topic1", new StoredEvent(new OrderGroupCheckedOutEvent(orderGroup.getId().getValue())));
+    kafkaTemplate.send("topic1", new StoredEvent(new OrderCheckedOutEvent(guestId)));
   }
 
-  public void deliverOrder(String orderGroupId, String orderId, Integer deliveryPersonId, String deliveryPersonName) {
-    OrderGroup orderGroup = orderRepository.orderGroupOfId(new OrderGroupId(orderGroupId));
+  public void deliverOrderItem(String orderItemId, Integer deliveryPersonId, String deliveryPersonName) {
+    OrderGroup orderGroup = orderRepository.orderGroupOfOrderItemId(new OrderItemId(orderItemId));
     DeliveryDateTime deliveredOn = new DeliveryDateTime(LocalDateTime.now());
-    orderGroup.deliverOrder(new OrderId(orderId), new DeliveryPersonId(deliveryPersonId),
+    orderGroup.deliverOrderItem(new OrderItemId(orderItemId), new DeliveryPersonId(deliveryPersonId),
         new DeliveryPersonName(deliveryPersonName), deliveredOn);
     orderRepository.save(orderGroup);
 
     kafkaTemplate.send("topic1", new StoredEvent(
-        new OrderDeliveredEvent(orderGroupId, orderId, deliveryPersonId, deliveryPersonName, deliveredOn.getValue())));
+        new OrderItemDeliveredEvent(orderItemId, deliveryPersonId, deliveryPersonName, deliveredOn.getValue())));
   }
 
 }

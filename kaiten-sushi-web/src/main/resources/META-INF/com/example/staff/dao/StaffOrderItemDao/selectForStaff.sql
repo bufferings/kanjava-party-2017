@@ -1,13 +1,12 @@
 SELECT
-  orderId
-  ,orderGroupId
+  orderItemId
   ,orderGuestId
   ,orderGuestName
   ,productId
   ,productName
   ,quantity
-  ,orderDateTime
+  ,orderedOn
 FROM
-  StaffOrderView
+  StaffOrderItem
 ORDER BY
-  orderDateTime ASC
+  orderedOn ASC

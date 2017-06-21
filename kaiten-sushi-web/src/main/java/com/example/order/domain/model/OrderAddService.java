@@ -5,13 +5,13 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.example.order.domain.event.OrderCreatedEvent;
+import com.example.order.domain.event.OrderItemCreatedEvent;
 import com.example.order.domain.event.StoredEvent;
-import com.example.order.domain.model.order.Order;
 import com.example.order.domain.model.order.OrderGroup;
 import com.example.order.domain.model.order.OrderGroupId;
 import com.example.order.domain.model.order.OrderGuestId;
 import com.example.order.domain.model.order.OrderGuestName;
+import com.example.order.domain.model.order.OrderItem;
 import com.example.order.domain.model.order.OrderQuantity;
 import com.example.order.domain.model.order.OrderRepository;
 import com.example.order.domain.model.product.Product;
@@ -48,15 +48,16 @@ public class OrderAddService {
       orderGroup = OrderGroup.newOrderGroup(orderGroupId, guestId, guestName);
     }
 
-    Order newOrder = orderGroup.addOrder(productId, quantity);
+    OrderItem newOrder = orderGroup.addOrderItem(productId, quantity);
     product.keepStockForOrder(quantity);
 
     orderRepository.save(orderGroup);
     productRepository.save(product);
 
     kafkaTemplate.send("topic1",
-        new StoredEvent(new OrderCreatedEvent(newOrder.getId().getValue(), orderGroup.getId().getValue(),
-            orderGroup.getGuestId().getValue(), orderGroup.getGuestName().getValue(), product.getId().getValue(),
-            product.getName().getValue(), newOrder.getQuantity().getValue(), newOrder.getOrderedOn().getValue())));
+        new StoredEvent(new OrderItemCreatedEvent(newOrder.getId().getValue(), orderGroup.getId().getValue(),
+            orderGroup.getOrderGuestId().getValue(), orderGroup.getOrderGuestName().getValue(),
+            product.getId().getValue(), product.getName().getValue(), newOrder.getQuantity().getValue(),
+            newOrder.getOrderedOn().getValue())));
   }
 }

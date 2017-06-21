@@ -9,12 +9,10 @@ import lombok.ToString;
 
 @Entity
 @ToString
-public class StaffOrderView {
+public class StaffOrderItem {
 
   @Id
-  public String orderId;
-
-  public String orderGroupId;
+  public String orderItemId;
 
   public Integer orderGuestId;
 
@@ -26,6 +24,6 @@ public class StaffOrderView {
 
   public Integer quantity;
 
-  public LocalDateTime orderDateTime;
+  public LocalDateTime orderedOn;
 
 }

@@ -5,16 +5,14 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class OrderDeliveredEvent implements DomainEvent {
+public class OrderItemDeliveredEvent implements DomainEvent {
 
-  public final String orderGroupId;
-
-  public final String orderId;
+  public final String orderItemId;
 
   public final Integer deliveryPersonId;
 
   public final String deliveryPersonName;
 
-  public final LocalDateTime deliveryDateTime;
+  public final LocalDateTime deliveredOn;
 
 }

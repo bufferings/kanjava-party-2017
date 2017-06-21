@@ -1,19 +1,18 @@
 SELECT
-  orderId
-  ,orderGroupId
+  orderItemId
   ,orderGuestId
   ,orderGuestName
   ,productId
   ,productName
   ,quantity
-  ,orderDateTime
+  ,orderedOn
+  ,delivered
   ,deliveryPersonId
   ,deliveryPersonName
-  ,deliveryDateTime
-  ,delivered
+  ,deliveredOn
 FROM
-  GuestOrderView
+  GuestOrderItem
 WHERE
   orderGuestId = /* orderGuestId */1
 ORDER BY
-  orderDateTime DESC
+  orderedOn DESC

@@ -11,11 +11,11 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 @ToString
-public class OrderId {
+public class OrderItemId {
 
   private String value;
 
-  public OrderId(String value) {
+  public OrderItemId(String value) {
     this.setValue(value);
   }
 

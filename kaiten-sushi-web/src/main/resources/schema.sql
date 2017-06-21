@@ -2,10 +2,10 @@ DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS OrderGroup;
 DROP TABLE IF EXISTS OrderItem;
 
-DROP TABLE IF EXISTS GuestProductView;
-DROP TABLE IF EXISTS GuestOrderView;
+DROP TABLE IF EXISTS GuestProduct;
+DROP TABLE IF EXISTS GuestOrderItem;
 
-DROP TABLE IF EXISTS StaffOrderView;
+DROP TABLE IF EXISTS StaffOrderItem;
 
 CREATE TABLE Product
 (
@@ -37,36 +37,37 @@ CREATE TABLE OrderItem
   ,status INT
 );
 
-CREATE TABLE GuestProductView
+CREATE TABLE GuestProduct
 (
   productId VARCHAR(36) PRIMARY KEY
   ,productName VARCHAR(30)
 );
 
-CREATE TABLE GuestOrderView
+CREATE TABLE GuestOrderItem
 (
-  orderId VARCHAR(36) PRIMARY KEY
-  ,orderGroupId VARCHAR(36)
+  orderItemId VARCHAR(36) PRIMARY KEY
   ,orderGuestId INT
   ,orderGuestName VARCHAR(30)
   ,productId VARCHAR(36)
   ,productName VARCHAR(30)
   ,quantity INT
-  ,orderDateTime DATETIME
+  ,orderedOn DATETIME
+  ,delivered INT
   ,deliveryPersonId INT
   ,deliveryPersonName VARCHAR(30)
-  ,deliveryDateTime DATETIME
-  ,delivered INT
+  ,deliveredOn DATETIME
+  ,INDEX idx1(orderGuestId, orderedOn)
 );
 
-CREATE TABLE StaffOrderView
+CREATE TABLE StaffOrderItem
 (
-  orderId VARCHAR(36) PRIMARY KEY
-  ,orderGroupId VARCHAR(36)
+  orderItemId VARCHAR(36) PRIMARY KEY
   ,orderGuestId INT
   ,orderGuestName VARCHAR(30)
   ,productId VARCHAR(36)
   ,productName VARCHAR(30)
   ,quantity INT
-  ,orderDateTime DATETIME
+  ,orderedOn DATETIME
+  ,INDEX idx1(orderGuestId)
+  ,INDEX idx2(orderedOn)
 );

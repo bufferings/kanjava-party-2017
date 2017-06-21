@@ -2,5 +2,5 @@ SELECT
   productId
   ,productName
 FROM
-  GuestProductView
+  GuestProduct
 ORDER BY productId

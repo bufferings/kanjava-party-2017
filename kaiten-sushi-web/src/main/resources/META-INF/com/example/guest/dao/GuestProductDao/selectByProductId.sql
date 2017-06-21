@@ -2,6 +2,6 @@ SELECT
   productId
   ,productName
 FROM
-  GuestProductView
+  GuestProduct
 WHERE
   productId = /* productId */1

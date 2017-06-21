@@ -5,60 +5,58 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.example.order.domain.event.DomainEvent;
-import com.example.order.domain.event.OrderCreatedEvent;
-import com.example.order.domain.event.OrderDeliveredEvent;
-import com.example.order.domain.event.OrderGroupCheckedOutEvent;
+import com.example.order.domain.event.OrderCheckedOutEvent;
+import com.example.order.domain.event.OrderItemCreatedEvent;
+import com.example.order.domain.event.OrderItemDeliveredEvent;
 import com.example.order.domain.event.StoredEvent;
 import com.example.staff.config.StaffKafkaConsumerConfig;
-import com.example.staff.dao.StaffOrderView;
-import com.example.staff.dao.StaffOrderViewDao;
+import com.example.staff.dao.StaffOrderItem;
+import com.example.staff.dao.StaffOrderItemDao;
 
 @Component
 public class StaffEventListener {
 
-  private StaffOrderViewDao orderStaffViewDao;
+  private StaffOrderItemDao staffOrderItemDao;
 
   @Autowired
-  public StaffEventListener(StaffOrderViewDao orderStaffViewDao) {
-    this.orderStaffViewDao = orderStaffViewDao;
+  public StaffEventListener(StaffOrderItemDao staffOrderItemDao) {
+    this.staffOrderItemDao = staffOrderItemDao;
   }
 
   @KafkaListener(topics = "topic1", containerFactory = StaffKafkaConsumerConfig.CONTAINER_NAME)
   public void listen(StoredEvent storedEvent) {
     DomainEvent event = storedEvent.toDomainEvent();
-    if (event instanceof OrderCreatedEvent) {
-      handleOrderCreatedEvent((OrderCreatedEvent) event);
-    } else if (event instanceof OrderDeliveredEvent) {
-      handleOrderDeliveredEvent((OrderDeliveredEvent) event);
-    } else if (event instanceof OrderGroupCheckedOutEvent) {
-      handleOrderGroupCheckedOutEvent((OrderGroupCheckedOutEvent) event);
+    if (event instanceof OrderItemCreatedEvent) {
+      handleOrderItemCreatedEvent((OrderItemCreatedEvent) event);
+    } else if (event instanceof OrderItemDeliveredEvent) {
+      handleOrderItemDeliveredEvent((OrderItemDeliveredEvent) event);
+    } else if (event instanceof OrderCheckedOutEvent) {
+      handleOrderCheckedOutEvent((OrderCheckedOutEvent) event);
     }
   }
 
-  private void handleOrderCreatedEvent(OrderCreatedEvent event) {
-    StaffOrderView staffView = createStaffView(event);
-    orderStaffViewDao.insert(staffView);
+  private void handleOrderItemCreatedEvent(OrderItemCreatedEvent event) {
+    StaffOrderItem staffView = createStaffOrderItem(event);
+    staffOrderItemDao.insert(staffView);
   }
 
-  private StaffOrderView createStaffView(OrderCreatedEvent event) {
-    StaffOrderView view = new StaffOrderView();
-    view.orderId = event.orderId;
-    view.orderGroupId = event.orderGroupId;
+  private StaffOrderItem createStaffOrderItem(OrderItemCreatedEvent event) {
+    StaffOrderItem view = new StaffOrderItem();
+    view.orderItemId = event.orderItemId;
     view.orderGuestId = event.orderGuestId;
     view.orderGuestName = event.orderGuestName;
     view.productId = event.productId;
     view.productName = event.productName;
     view.quantity = event.quantity;
-    view.orderDateTime = event.orderDateTime;
+    view.orderedOn = event.orderedOn;
     return view;
   }
 
-  private void handleOrderDeliveredEvent(OrderDeliveredEvent event) {
-    StaffOrderView staffView = orderStaffViewDao.selectById(event.orderId);
-    orderStaffViewDao.delete(staffView);
+  private void handleOrderItemDeliveredEvent(OrderItemDeliveredEvent event) {
+    staffOrderItemDao.deleteByOrderItemId(event.orderItemId);
   }
 
-  private void handleOrderGroupCheckedOutEvent(OrderGroupCheckedOutEvent event) {
-    orderStaffViewDao.deleteByGroupId(event.orderGroupId);
+  private void handleOrderCheckedOutEvent(OrderCheckedOutEvent event) {
+    staffOrderItemDao.deleteByOrderGuestId(event.orderGuestId);
   }
 }

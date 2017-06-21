@@ -9,39 +9,39 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.guest.dao.GuestOrderView;
-import com.example.guest.dao.GuestOrderViewDao;
-import com.example.guest.dao.GuestProductView;
-import com.example.guest.dao.GuestProductViewDao;
+import com.example.guest.dao.GuestOrderItem;
+import com.example.guest.dao.GuestOrderItemDao;
+import com.example.guest.dao.GuestProduct;
+import com.example.guest.dao.GuestProductDao;
 import com.example.security.LoginUser;
 
 @RestController
 @RequestMapping("guest/api")
 public class GuestReadApi {
 
-  private GuestProductViewDao guestProductViewDao;
+  private GuestProductDao guestProductDao;
 
-  private GuestOrderViewDao guestOrderViewDao;
+  private GuestOrderItemDao guestOrderItemDao;
 
   @Autowired
-  public GuestReadApi(GuestProductViewDao guestProductViewDao, GuestOrderViewDao guestOrderViewDao) {
-    this.guestProductViewDao = guestProductViewDao;
-    this.guestOrderViewDao = guestOrderViewDao;
+  public GuestReadApi(GuestProductDao guestProductDao, GuestOrderItemDao guestOrderItemDao) {
+    this.guestProductDao = guestProductDao;
+    this.guestOrderItemDao = guestOrderItemDao;
   }
 
   @GetMapping("products")
-  public List<GuestProductView> products() {
-    return guestProductViewDao.selectAll();
+  public List<GuestProduct> products() {
+    return guestProductDao.selectAll();
   }
 
   @GetMapping("products/{productId}")
-  public GuestProductView product(@PathVariable("productId") String productId) {
-    return guestProductViewDao.selectById(productId);
+  public GuestProduct product(@PathVariable("productId") String productId) {
+    return guestProductDao.selectByProductId(productId);
   }
 
-  @GetMapping("orders")
-  public List<GuestOrderView> orders(@AuthenticationPrincipal LoginUser loginUser) {
-    return guestOrderViewDao.selectByGuestId(loginUser.getId());
+  @GetMapping("order-items")
+  public List<GuestOrderItem> orderItems(@AuthenticationPrincipal LoginUser loginUser) {
+    return guestOrderItemDao.selectByOrderGuestId(loginUser.getId());
   }
 
 }

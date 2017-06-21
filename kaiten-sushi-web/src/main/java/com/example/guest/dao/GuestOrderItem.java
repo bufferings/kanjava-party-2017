@@ -9,12 +9,10 @@ import lombok.ToString;
 
 @Entity
 @ToString
-public class GuestOrderView {
+public class GuestOrderItem {
 
   @Id
-  public String orderId;
-
-  public String orderGroupId;
+  public String orderItemId;
 
   public Integer orderGuestId;
 
@@ -26,14 +24,14 @@ public class GuestOrderView {
 
   public Integer quantity;
 
-  public LocalDateTime orderDateTime;
+  public LocalDateTime orderedOn;
+
+  public OrderItemDelivered delivered;
 
   public Integer deliveryPersonId;
 
   public String deliveryPersonName;
 
-  public LocalDateTime deliveryDateTime;
-
-  public OrderDelivered delivered;
+  public LocalDateTime deliveredOn;
 
 }

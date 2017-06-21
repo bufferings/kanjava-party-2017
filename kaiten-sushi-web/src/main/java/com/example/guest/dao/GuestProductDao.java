@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @ConfigAutowireable
 @Dao
-public interface GuestProductViewDao {
+public interface GuestProductDao {
 
   @Select
-  List<GuestProductView> selectAll();
+  List<GuestProduct> selectAll();
 
   @Select
-  GuestProductView selectById(String productId);
+  GuestProduct selectByProductId(String productId);
 
 }

@@ -32,12 +32,12 @@ public class GuestKafkaConsumerConfig {
     Map<String, Object> config = properties.buildConsumerProperties();
     config.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
 
-    ConsumerFactory<String, StoredEvent> cf = new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
-        new JsonDeserializer<>(StoredEvent.class));
+    ConsumerFactory<String, StoredEvent> consumerFactory = new DefaultKafkaConsumerFactory<>(config,
+        new StringDeserializer(), new JsonDeserializer<>(StoredEvent.class));
 
-    ConcurrentKafkaListenerContainerFactory<String, StoredEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
-    factory.setConsumerFactory(cf);
-    return factory;
+    ConcurrentKafkaListenerContainerFactory<String, StoredEvent> containerFactory = new ConcurrentKafkaListenerContainerFactory<>();
+    containerFactory.setConsumerFactory(consumerFactory);
+    return containerFactory;
   }
 
 }

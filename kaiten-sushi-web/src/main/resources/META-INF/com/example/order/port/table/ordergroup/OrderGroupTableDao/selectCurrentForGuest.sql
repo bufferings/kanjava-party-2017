@@ -8,4 +8,4 @@ FROM
   OrderGroup
 WHERE
   orderGuestId = /* orderGuestId */1
-  AND status <> 3
+  AND status <> 2

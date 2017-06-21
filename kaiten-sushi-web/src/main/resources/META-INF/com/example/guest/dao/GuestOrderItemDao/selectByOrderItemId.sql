@@ -1,17 +1,16 @@
 SELECT
-  orderId
-  ,orderGroupId
+  orderItemId
   ,orderGuestId
   ,orderGuestName
   ,productId
   ,productName
   ,quantity
-  ,orderDateTime
+  ,orderedOn
+  ,delivered
   ,deliveryPersonId
   ,deliveryPersonName
-  ,deliveryDateTime
-  ,delivered
+  ,deliveredOn
 FROM
-  GuestOrderView
+  GuestOrderItem
 WHERE
-  orderId = /* orderId */1
+  orderItemId = /* orderItemId */1

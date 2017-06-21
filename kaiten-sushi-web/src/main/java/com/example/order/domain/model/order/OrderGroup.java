@@ -17,43 +17,43 @@ import lombok.ToString;
 @ToString
 public class OrderGroup {
 
-  public static OrderGroup newOrderGroup(OrderGroupId id, OrderGuestId guestId, OrderGuestName guestName) {
-    return new OrderGroup(id, guestId, guestName, OrderGroupStatus.OPENED, new ArrayList<Order>(), -1);
+  public static OrderGroup newOrderGroup(OrderGroupId id, OrderGuestId orderGuestId, OrderGuestName orderGuestName) {
+    return new OrderGroup(id, orderGuestId, orderGuestName, OrderGroupStatus.OPENED, new ArrayList<OrderItem>(), -1);
   }
 
-  public static OrderGroup restoreFromDataStore(OrderGroupId id, OrderGuestId guestId, OrderGuestName guestName,
-      OrderGroupStatus status, List<Order> orders, Integer version) {
+  public static OrderGroup restoreFromDataStore(OrderGroupId id, OrderGuestId orderGuestId, OrderGuestName orderGuestName,
+      OrderGroupStatus status, List<OrderItem> orderItems, Integer version) {
     Assert.notNull(version);
     Assert.isTrue(version >= 1);
-    return new OrderGroup(id, guestId, guestName, status, orders, version);
+    return new OrderGroup(id, orderGuestId, orderGuestName, status, orderItems, version);
   }
 
   private OrderGroupId id;
 
-  private OrderGuestId guestId;
+  private OrderGuestId orderGuestId;
 
-  private OrderGuestName guestName;
+  private OrderGuestName orderGuestName;
 
   private OrderGroupStatus status;
 
-  private List<Order> orders;
+  private List<OrderItem> orderItems;
 
   private Integer version;
 
-  private OrderGroup(OrderGroupId id, OrderGuestId guestId, OrderGuestName guestName, OrderGroupStatus status,
-      List<Order> orders, Integer version) {
+  private OrderGroup(OrderGroupId id, OrderGuestId orderGuestId, OrderGuestName orderGuestName, OrderGroupStatus status,
+      List<OrderItem> orderItems, Integer version) {
     this.setId(id);
-    this.setGuestId(guestId);
-    this.setGuestName(guestName);
+    this.setOrderGuestId(orderGuestId);
+    this.setOrderGuestName(orderGuestName);
     this.setStatus(status);
-    this.setOrders(orders);
+    this.setOrderItems(orderItems);
     this.setVersion(version);
   }
 
-  public Order addOrder(ProductId productId, OrderQuantity quantity) {
-    Order newOrder = Order.newOrder(new OrderId(IdUtil.generateId()), productId, quantity);
-    this.getOrders().add(newOrder);
-    return newOrder;
+  public OrderItem addOrderItem(ProductId productId, OrderQuantity quantity) {
+    OrderItem newOrderItem = OrderItem.newOrderItem(new OrderItemId(IdUtil.generateId()), productId, quantity);
+    this.getOrderItems().add(newOrderItem);
+    return newOrderItem;
   }
 
   public boolean canCheckout() {
@@ -65,27 +65,27 @@ public class OrderGroup {
     this.setStatus(OrderGroupStatus.CLOSED);
   }
 
-  public boolean canDeliverOrder(OrderId orderId) {
+  public boolean canDeliverOrderItem(OrderItemId orderItemId) {
     if (this.getStatus() == OrderGroupStatus.CLOSED) {
       return false;
     }
-    Order order = getOrder(orderId);
-    if (order == null) {
+    OrderItem orderItem = getOrderItem(orderItemId);
+    if (orderItem == null) {
       return false;
     }
-    return order.canDeliver();
+    return orderItem.canDeliver();
   }
 
-  public void deliverOrder(OrderId orderId, DeliveryPersonId deliveryPersonId, DeliveryPersonName deliveryPersonName,
+  public void deliverOrderItem(OrderItemId orderItemId, DeliveryPersonId deliveryPersonId, DeliveryPersonName deliveryPersonName,
       DeliveryDateTime deliveredOn) {
-    Assert.state(canDeliverOrder(orderId));
-    getOrder(orderId).deliver(deliveryPersonId, deliveryPersonName, deliveredOn);
+    Assert.state(canDeliverOrderItem(orderItemId));
+    getOrderItem(orderItemId).deliver(deliveryPersonId, deliveryPersonName, deliveredOn);
   }
 
-  private Order getOrder(OrderId orderId) {
-    for (Order order : orders) {
-      if (order.getId().equals(orderId)) {
-        return order;
+  private OrderItem getOrderItem(OrderItemId orderItemId) {
+    for (OrderItem orderItem : orderItems) {
+      if (orderItem.getId().equals(orderItemId)) {
+        return orderItem;
       }
     }
     return null;
@@ -108,14 +108,14 @@ public class OrderGroup {
     this.id = id;
   }
 
-  private void setGuestId(OrderGuestId guestId) {
-    Assert.notNull(guestId);
-    this.guestId = guestId;
+  private void setOrderGuestId(OrderGuestId orderGuestId) {
+    Assert.notNull(orderGuestId);
+    this.orderGuestId = orderGuestId;
   }
 
-  private void setGuestName(OrderGuestName guestName) {
-    Assert.notNull(guestName);
-    this.guestName = guestName;
+  private void setOrderGuestName(OrderGuestName orderGuestName) {
+    Assert.notNull(orderGuestName);
+    this.orderGuestName = orderGuestName;
   }
 
   private void setStatus(OrderGroupStatus status) {
@@ -123,9 +123,9 @@ public class OrderGroup {
     this.status = status;
   }
 
-  private void setOrders(List<Order> orders) {
-    Assert.notNull(orders);
-    this.orders = orders;
+  private void setOrderItems(List<OrderItem> orderItems) {
+    Assert.notNull(orderItems);
+    this.orderItems = orderItems;
   }
 
   private void setVersion(Integer version) {

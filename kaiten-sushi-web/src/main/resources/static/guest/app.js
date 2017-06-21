@@ -36,12 +36,12 @@ angular.module('guestApp', [ 'ngRoute', 'ngAnimate' ])
         return $http.get('/guest/api/products/' + $route.current.params.id);
       }
     }
-  }).when('/orders', {
-    controller : 'OrderController',
-    templateUrl : 'view/orders.html',
+  }).when('/order-items', {
+    controller : 'OrderItemController',
+    templateUrl : 'view/order-items.html',
     resolve : {
-      orders : function($http) {
-        return $http.get('/guest/api/orders');
+      orderItems : function($http) {
+        return $http.get('/guest/api/order-items');
       }
     }
   }).when('/checkout', {
@@ -69,7 +69,7 @@ angular.module('guestApp', [ 'ngRoute', 'ngAnimate' ])
     }
     $http({
       method : 'POST',
-      url : '/guest/api/orders/add',
+      url : '/guest/api/order-items/add',
       headers : {
         'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
       },
@@ -89,8 +89,8 @@ angular.module('guestApp', [ 'ngRoute', 'ngAnimate' ])
 })
 
 //
-.controller('OrderController', function($scope, orders) {
-  $scope.orders = orders.data;
+.controller('OrderItemController', function($scope, orderItems) {
+  $scope.orderItems = orderItems.data;
 })
 
 //

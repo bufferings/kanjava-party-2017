@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @Entity
 @ToString
-public class GuestProductView {
+public class GuestProduct {
 
   @Id
   public String productId;

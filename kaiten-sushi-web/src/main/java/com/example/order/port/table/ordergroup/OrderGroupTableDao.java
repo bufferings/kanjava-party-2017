@@ -1,7 +1,5 @@
 package com.example.order.port.table.ordergroup;
 
-import java.util.List;
-
 import org.seasar.doma.Dao;
 import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
@@ -23,8 +21,5 @@ public interface OrderGroupTableDao {
 
   @Select
   OrderGroupTable selectCurrentForGuest(Integer orderGuestId);
-
-  @Select
-  List<OrderGroupTable> selectCheckout();
 
 }

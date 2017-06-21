@@ -13,20 +13,20 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 @ToString
-public class Order {
+public class OrderItem {
 
-  public static Order newOrder(OrderId id, ProductId productId, OrderQuantity quantity) {
-    return new Order(id, productId, quantity, new OrderDateTime(LocalDateTime.now()), null, null, null,
+  public static OrderItem newOrderItem(OrderItemId id, ProductId productId, OrderQuantity quantity) {
+    return new OrderItem(id, productId, quantity, new OrderDateTime(LocalDateTime.now()), null, null, null,
         OrderStatus.ORDERED);
   }
 
-  public static Order restoreFromDataStore(OrderId id, ProductId productId, OrderQuantity quantity,
+  public static OrderItem restoreFromDataStore(OrderItemId id, ProductId productId, OrderQuantity quantity,
       OrderDateTime orderedOn, DeliveryPersonId deliveryPersonId, DeliveryPersonName deliveryPersonName,
       DeliveryDateTime deliveredOn, OrderStatus status) {
-    return new Order(id, productId, quantity, orderedOn, deliveryPersonId, deliveryPersonName, deliveredOn, status);
+    return new OrderItem(id, productId, quantity, orderedOn, deliveryPersonId, deliveryPersonName, deliveredOn, status);
   }
 
-  private OrderId id;
+  private OrderItemId id;
 
   private ProductId productId;
 
@@ -42,7 +42,7 @@ public class Order {
 
   private OrderStatus status;
 
-  private Order(OrderId id, ProductId productId, OrderQuantity quantity, OrderDateTime orderedOn,
+  private OrderItem(OrderItemId id, ProductId productId, OrderQuantity quantity, OrderDateTime orderedOn,
       DeliveryPersonId deliveryPersonId, DeliveryPersonName deliveryPersonName, DeliveryDateTime deliveredOn,
       OrderStatus status) {
     this.setId(id);
@@ -68,7 +68,7 @@ public class Order {
     this.setStatus(OrderStatus.DELIVERED);
   }
 
-  private void setId(OrderId id) {
+  private void setId(OrderItemId id) {
     Assert.notNull(id);
     this.id = id;
   }

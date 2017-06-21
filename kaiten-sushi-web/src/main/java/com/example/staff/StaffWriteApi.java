@@ -21,10 +21,10 @@ public class StaffWriteApi {
     this.orderUsecase = orderUsecase;
   }
 
-  @PostMapping("order-groups/{orderGroupId}/{orderId}/deliver")
+  @PostMapping("order-items/{orderItemId}/deliver")
   public void deliverOrder(@AuthenticationPrincipal LoginUser loginUser,
-      @PathVariable("orderGroupId") String orderGroupId, @PathVariable("orderId") String orderId) {
-    orderUsecase.deliverOrder(orderGroupId, orderId, loginUser.getId(), loginUser.getName());
+      @PathVariable("orderItemId") String orderItemId) {
+    orderUsecase.deliverOrderItem(orderItemId, loginUser.getId(), loginUser.getName());
   }
 
 }
