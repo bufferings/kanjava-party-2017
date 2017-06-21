@@ -1,6 +1,12 @@
 server:
   port: 8182
 
+security:
+  oauth2:
+    resource:
+      load-balanced: true
+      user-info-uri: http://user-service/me
+
 spring:
   datasource:
     url:  jdbc:mysql://localhost:3306/kjp2017-2?useSSL=false
@@ -14,9 +20,3 @@ schema:
 
 doma:
   dialect: MYSQL
-
-security:
-  oauth2:
-    resource:
-      load-balanced: true
-      user-info-uri: http://user-service/me
