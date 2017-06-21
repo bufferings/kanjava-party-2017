@@ -31,6 +31,9 @@ CREATE TABLE OrderItem
   ,productId VARCHAR(36)
   ,quantity INT
   ,orderDateTime DATETIME
+  ,deliveryPersonId INT
+  ,deliveryPersonName VARCHAR(30)
+  ,deliveryDateTime DATETIME
   ,status INT
 );
 
@@ -50,6 +53,9 @@ CREATE TABLE GuestOrderView
   ,productName VARCHAR(30)
   ,quantity INT
   ,orderDateTime DATETIME
+  ,deliveryPersonId INT
+  ,deliveryPersonName VARCHAR(30)
+  ,deliveryDateTime DATETIME
   ,delivered INT
 );
 

@@ -24,6 +24,12 @@ public class OrderItemTable {
 
   public LocalDateTime orderDateTime;
 
+  public Integer deliveryPersonId;
+
+  public String deliveryPersonName;
+
+  public LocalDateTime deliveryDateTime;
+
   public Integer status;
 
 }

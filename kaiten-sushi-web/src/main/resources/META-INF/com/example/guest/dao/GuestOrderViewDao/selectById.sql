@@ -7,6 +7,9 @@ SELECT
   ,productName
   ,quantity
   ,orderDateTime
+  ,deliveryPersonId
+  ,deliveryPersonName
+  ,deliveryDateTime
   ,delivered
 FROM
   GuestOrderView

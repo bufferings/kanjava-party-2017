@@ -4,6 +4,9 @@ SELECT
   ,productId
   ,quantity
   ,orderDateTime
+  ,deliveryPersonId
+  ,deliveryPersonName
+  ,deliveryDateTime
   ,status
 FROM
   OrderItem

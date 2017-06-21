@@ -22,7 +22,7 @@
         <td>{{ order.quantity }} 皿</td>
         <td>
           <span ng-if="order.delivered == 'NOT_DELIVERED'">未</span>
-          <span ng-if="order.delivered == 'DELIVERED'">済</span>
+          <span ng-if="order.delivered == 'DELIVERED'">{{ order.deliveryPersonName }} さんが届けてくれました！</span>
         </td>
       </tr>
     </tbody>

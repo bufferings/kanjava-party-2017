@@ -28,6 +28,12 @@ public class GuestOrderView {
 
   public LocalDateTime orderDateTime;
 
+  public Integer deliveryPersonId;
+
+  public String deliveryPersonName;
+
+  public LocalDateTime deliveryDateTime;
+
   public OrderDelivered delivered;
 
 }

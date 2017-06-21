@@ -57,6 +57,9 @@ public class GuestEventListener {
 
   private void handleOrderDeliveredEvent(OrderDeliveredEvent event) {
     GuestOrderView guestView = guestOrderViewDao.selectById(event.orderId);
+    guestView.deliveryPersonId = event.deliveryPersonId;
+    guestView.deliveryPersonName = event.deliveryPersonName;
+    guestView.deliveryDateTime = event.deliveryDateTime;
     guestView.delivered = OrderDelivered.DELIVERED;
     guestOrderViewDao.update(guestView);
   }

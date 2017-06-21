@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.order.domain.model.order.DeliveryDateTime;
+import com.example.order.domain.model.order.DeliveryPersonId;
+import com.example.order.domain.model.order.DeliveryPersonName;
 import com.example.order.domain.model.order.Order;
 import com.example.order.domain.model.order.OrderDateTime;
 import com.example.order.domain.model.order.OrderGroup;
@@ -116,6 +119,9 @@ public class DomaOrderRepository implements OrderRepository {
   private Order orderFrom(OrderItemTable orderRecord) {
     return Order.restoreFromDataStore(new OrderId(orderRecord.orderItemId), new ProductId(orderRecord.productId),
         new OrderQuantity(orderRecord.quantity), new OrderDateTime(orderRecord.orderDateTime),
+        (orderRecord.deliveryPersonId != null ? new DeliveryPersonId(orderRecord.deliveryPersonId) : null),
+        (orderRecord.deliveryPersonName != null ? new DeliveryPersonName(orderRecord.deliveryPersonName) : null),
+        (orderRecord.deliveryDateTime != null ? new DeliveryDateTime(orderRecord.deliveryDateTime) : null),
         orderStatusFrom(orderRecord.status));
   }
 
@@ -157,6 +163,11 @@ public class DomaOrderRepository implements OrderRepository {
     orderItemRecord.productId = order.getProductId().getValue();
     orderItemRecord.orderDateTime = order.getOrderedOn().getValue();
     orderItemRecord.quantity = order.getQuantity().getValue();
+    orderItemRecord.deliveryPersonId = (order.getDeliveryPersonId() != null ? order.getDeliveryPersonId().getValue()
+        : null);
+    orderItemRecord.deliveryPersonName = (order.getDeliveryPersonName() != null
+        ? order.getDeliveryPersonName().getValue() : null);
+    orderItemRecord.deliveryDateTime = (order.getDeliveredOn() != null ? order.getDeliveredOn().getValue() : null);
     orderItemRecord.status = orderItemRecordStatusFrom(order.getStatus());
     return orderItemRecord;
   }

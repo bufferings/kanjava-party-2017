@@ -1,5 +1,7 @@
 package com.example.order.usecase;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,9 @@ import com.example.order.domain.event.OrderDeliveredEvent;
 import com.example.order.domain.event.OrderGroupCheckedOutEvent;
 import com.example.order.domain.event.StoredEvent;
 import com.example.order.domain.model.OrderAddService;
+import com.example.order.domain.model.order.DeliveryDateTime;
+import com.example.order.domain.model.order.DeliveryPersonId;
+import com.example.order.domain.model.order.DeliveryPersonName;
 import com.example.order.domain.model.order.OrderGroup;
 import com.example.order.domain.model.order.OrderGroupId;
 import com.example.order.domain.model.order.OrderGuestId;
@@ -51,12 +56,15 @@ public class OrderUsecase {
     kafkaTemplate.send("topic1", new StoredEvent(new OrderGroupCheckedOutEvent(orderGroup.getId().getValue())));
   }
 
-  public void deliverOrder(String orderGroupId, String orderId) {
+  public void deliverOrder(String orderGroupId, String orderId, Integer deliveryPersonId, String deliveryPersonName) {
     OrderGroup orderGroup = orderRepository.orderGroupOfId(new OrderGroupId(orderGroupId));
-    orderGroup.deliverOrder(new OrderId(orderId));
+    DeliveryDateTime deliveredOn = new DeliveryDateTime(LocalDateTime.now());
+    orderGroup.deliverOrder(new OrderId(orderId), new DeliveryPersonId(deliveryPersonId),
+        new DeliveryPersonName(deliveryPersonName), deliveredOn);
     orderRepository.save(orderGroup);
 
-    kafkaTemplate.send("topic1", new StoredEvent(new OrderDeliveredEvent(orderGroupId, orderId)));
+    kafkaTemplate.send("topic1", new StoredEvent(
+        new OrderDeliveredEvent(orderGroupId, orderId, deliveryPersonId, deliveryPersonName, deliveredOn.getValue())));
   }
 
 }

@@ -15,15 +15,15 @@ import lombok.ToString;
 @ToString
 public class Order {
 
-  public static Order newOrder(OrderId id, ProductId productId,
-      OrderQuantity quantity) {
-    return new Order(id, productId, quantity,
-        new OrderDateTime(LocalDateTime.now()), OrderStatus.ORDERED);
+  public static Order newOrder(OrderId id, ProductId productId, OrderQuantity quantity) {
+    return new Order(id, productId, quantity, new OrderDateTime(LocalDateTime.now()), null, null, null,
+        OrderStatus.ORDERED);
   }
 
-  public static Order restoreFromDataStore(OrderId id, ProductId productId,
-      OrderQuantity quantity, OrderDateTime orderedOn, OrderStatus status) {
-    return new Order(id, productId, quantity, orderedOn, status);
+  public static Order restoreFromDataStore(OrderId id, ProductId productId, OrderQuantity quantity,
+      OrderDateTime orderedOn, DeliveryPersonId deliveryPersonId, DeliveryPersonName deliveryPersonName,
+      DeliveryDateTime deliveredOn, OrderStatus status) {
+    return new Order(id, productId, quantity, orderedOn, deliveryPersonId, deliveryPersonName, deliveredOn, status);
   }
 
   private OrderId id;
@@ -34,14 +34,24 @@ public class Order {
 
   private OrderDateTime orderedOn;
 
+  private DeliveryPersonId deliveryPersonId;
+
+  private DeliveryPersonName deliveryPersonName;
+
+  private DeliveryDateTime deliveredOn;
+
   private OrderStatus status;
 
-  private Order(OrderId id, ProductId productId, OrderQuantity quantity,
-      OrderDateTime orderedOn, OrderStatus status) {
+  private Order(OrderId id, ProductId productId, OrderQuantity quantity, OrderDateTime orderedOn,
+      DeliveryPersonId deliveryPersonId, DeliveryPersonName deliveryPersonName, DeliveryDateTime deliveredOn,
+      OrderStatus status) {
     this.setId(id);
     this.setProductId(productId);
     this.setQuantity(quantity);
     this.setOrderedOn(orderedOn);
+    this.setDeliveryPersonId(deliveryPersonId);
+    this.setDeliveryPersonName(deliveryPersonName);
+    this.setDeliveredOn(deliveredOn);
     this.setStatus(status);
   }
 
@@ -49,8 +59,12 @@ public class Order {
     return this.getStatus() == OrderStatus.ORDERED;
   }
 
-  public void deliver() {
+  public void deliver(DeliveryPersonId deliveryPersonId, DeliveryPersonName deliveryPersonName,
+      DeliveryDateTime deliveredOn) {
     Assert.state(canDeliver());
+    this.setDeliveryPersonId(deliveryPersonId);
+    this.setDeliveryPersonName(deliveryPersonName);
+    this.setDeliveredOn(deliveredOn);
     this.setStatus(OrderStatus.DELIVERED);
   }
 
@@ -72,6 +86,18 @@ public class Order {
   private void setOrderedOn(OrderDateTime orderedOn) {
     Assert.notNull(orderedOn);
     this.orderedOn = orderedOn;
+  }
+
+  private void setDeliveryPersonId(DeliveryPersonId deliveryPersonId) {
+    this.deliveryPersonId = deliveryPersonId;
+  }
+
+  private void setDeliveryPersonName(DeliveryPersonName deliveryPersonName) {
+    this.deliveryPersonName = deliveryPersonName;
+  }
+
+  private void setDeliveredOn(DeliveryDateTime deliveredOn) {
+    this.deliveredOn = deliveredOn;
   }
 
   private void setStatus(OrderStatus status) {

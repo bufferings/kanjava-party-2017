@@ -76,9 +76,10 @@ public class OrderGroup {
     return order.canDeliver();
   }
 
-  public void deliverOrder(OrderId orderId) {
+  public void deliverOrder(OrderId orderId, DeliveryPersonId deliveryPersonId, DeliveryPersonName deliveryPersonName,
+      DeliveryDateTime deliveredOn) {
     Assert.state(canDeliverOrder(orderId));
-    getOrder(orderId).deliver();
+    getOrder(orderId).deliver(deliveryPersonId, deliveryPersonName, deliveredOn);
   }
 
   private Order getOrder(OrderId orderId) {
