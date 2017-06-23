@@ -4,3 +4,6 @@ server:
 schema:
   registry:
     url: http://localhost:8081
+
+logging.level:
+  org.apache.kafka.streams.processor.internals.StreamThread: warn

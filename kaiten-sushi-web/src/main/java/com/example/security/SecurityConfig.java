@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // @formatter:off
     http
       .antMatcher("/**").authorizeRequests()
-      .antMatchers("/", "/login**").permitAll()
+      .antMatchers("/", "/login**", "/endpoint", "/stomp.js").permitAll()
       .anyRequest().authenticated();
     
     http

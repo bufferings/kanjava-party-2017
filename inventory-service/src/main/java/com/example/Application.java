@@ -26,7 +26,7 @@ public class Application {
   @KafkaListener(topics = { "inventory-topic", "inventory-result-topic" })
   public void listen(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Payload GenericRecord record)
       throws Exception {
-    logger.info("Received. " + topic + " - " + record);
+    logger.info("Received. " + topic + " - " + record.getSchema().getFullName() + " - " + record);
   }
 
 }

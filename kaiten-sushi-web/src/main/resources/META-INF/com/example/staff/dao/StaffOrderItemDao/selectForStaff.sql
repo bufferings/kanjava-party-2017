@@ -1,12 +1,15 @@
 SELECT
-  orderItemId
-  ,orderGuestId
-  ,orderGuestName
-  ,productId
-  ,productName
-  ,quantity
-  ,orderedOn
+  a.orderItemId
+  ,a.orderGuestId
+  ,a.orderGuestName
+  ,a.productId
+  ,b.productName
+  ,a.quantity
+  ,a.orderedOn
 FROM
-  StaffOrderItem
+  StaffOrderItem AS a
+    LEFT JOIN StaffProduct AS b
+      ON a.productId = b.productId
 ORDER BY
-  orderedOn ASC
+  a.orderedOn ASC
+

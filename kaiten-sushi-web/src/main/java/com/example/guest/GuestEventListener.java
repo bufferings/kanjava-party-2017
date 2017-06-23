@@ -51,7 +51,6 @@ public class GuestEventListener {
     view.orderGuestId = (Integer) event.get("orderGuestId");
     view.orderGuestName = ((Utf8) event.get("orderGuestName")).toString();
     view.productId = ((Utf8) event.get("productId")).toString();
-    view.productName = ((Utf8) event.get("productName")).toString();
     view.quantity = (Integer) event.get("quantity");
     view.orderedOn = LocalDateTime.parse(((Utf8) event.get("orderedOn")).toString());
     view.delivered = OrderItemDelivered.NOT_DELIVERED;

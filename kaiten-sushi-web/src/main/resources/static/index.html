@@ -1,9 +1,47 @@
+<!DOCTYPE html>
+<!-- Spring Bootハンズオンを参照しました -->
+<!-- http://spring-boot-camp.readthedocs.io/ja/latest/06-STOMP.html -->
 <html>
 <head>
-<meta charset="utf-8">
-<title>ばふぁ寿司</title>
+    <meta charset="UTF-8">
+    <title>Hello STOMP</title>
 </head>
 <body>
-Thank you!!
+<div>
+    <div id="response"></div>
+</div>
 </body>
+<script src="stomp.js"></script>
+<script type="text/javascript">
+    /**
+     * 初期化処理
+     */
+    var HelloStomp = function () {
+        // エンドポイントへの接続処理
+        var socket = new WebSocket('ws://' + location.host + '/endpoint'); // エンドポイントのURL
+        this.stompClient = Stomp.over(socket); // WebSocketを使ったStompクライアントを作成
+        this.stompClient.connect({}, this.onConnected.bind(this)); // エンドポイントに接続し、接続した際のコールバックを登録
+    };
+
+    /**
+     * エンドポイントへ接続したときの処理
+     */
+    HelloStomp.prototype.onConnected = function (frame) {
+        console.log('Connected: ' + frame);
+        // 宛先が'/topic/greetings'のメッセージを購読し、コールバック処理を登録
+        this.stompClient.subscribe('/topic/greetings', this.onSubscribeGreeting.bind(this));
+    };
+
+    /**
+     * 宛先'/topic/greetings'なメッセージを受信したときの処理
+     */
+    HelloStomp.prototype.onSubscribeGreeting = function (message) {
+        var response = document.getElementById('response');
+        var p = document.createElement('p');
+        p.appendChild(document.createTextNode(message.body));
+        response.insertBefore(p, response.children[0]);
+    };
+
+    new HelloStomp();
+</script>
 </html>

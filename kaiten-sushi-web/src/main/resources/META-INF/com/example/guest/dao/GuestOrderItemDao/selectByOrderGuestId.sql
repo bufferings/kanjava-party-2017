@@ -1,18 +1,21 @@
 SELECT
-  orderItemId
-  ,orderGuestId
-  ,orderGuestName
-  ,productId
-  ,productName
-  ,quantity
-  ,orderedOn
-  ,delivered
-  ,deliveryPersonId
-  ,deliveryPersonName
-  ,deliveredOn
+  a.orderItemId
+  ,a.orderGuestId
+  ,a.orderGuestName
+  ,a.productId
+  ,b.productName
+  ,a.quantity
+  ,a.orderedOn
+  ,a.delivered
+  ,a.deliveryPersonId
+  ,a.deliveryPersonName
+  ,a.deliveredOn
 FROM
-  GuestOrderItem
+  GuestOrderItem AS a
+    LEFT JOIN GuestProduct AS b
+      ON a.productId = b.productId
 WHERE
-  orderGuestId = /* orderGuestId */1
+  a.orderGuestId = /* orderGuestId */1
 ORDER BY
-  orderedOn DESC
+  a.orderedOn DESC
+

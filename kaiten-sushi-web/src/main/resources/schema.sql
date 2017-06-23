@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS GuestProduct;
 DROP TABLE IF EXISTS GuestOrderItem;
 
+DROP TABLE IF EXISTS StaffProduct;
 DROP TABLE IF EXISTS StaffOrderItem;
 
 CREATE TABLE GuestProduct
@@ -13,7 +14,7 @@ CREATE TABLE GuestOrderItem
 (
   orderItemId VARCHAR(36) PRIMARY KEY
   ,orderGuestId INT
-  ,orderGuestName VARCHAR(30)
+  ,orderGuestName VARCHAR(255)
   ,productId VARCHAR(36)
   ,productName VARCHAR(30)
   ,quantity INT
@@ -25,11 +26,17 @@ CREATE TABLE GuestOrderItem
   ,INDEX idx1(orderGuestId, orderedOn)
 );
 
+CREATE TABLE StaffProduct
+(
+  productId VARCHAR(36) PRIMARY KEY
+  ,productName VARCHAR(30)
+);
+
 CREATE TABLE StaffOrderItem
 (
   orderItemId VARCHAR(36) PRIMARY KEY
   ,orderGuestId INT
-  ,orderGuestName VARCHAR(30)
+  ,orderGuestName VARCHAR(255)
   ,productId VARCHAR(36)
   ,productName VARCHAR(30)
   ,quantity INT

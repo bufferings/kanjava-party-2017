@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.event.InventoryReservationRequestedEvent;
 import com.example.event.InventoryReservationRequestedEventSchema;
-import com.example.util.IdUtil;
 
 @RestController
 public class InventoryRequestApi {
@@ -28,10 +27,10 @@ public class InventoryRequestApi {
   }
 
   @PostMapping("request")
-  public void request(@RequestParam("productId") String productId,
+  public void request(@RequestParam("eventId") String eventId, @RequestParam("productId") String productId,
       @RequestParam("reservationCount") Integer reservationCount) {
     InventoryReservationRequestedEvent event = InventoryReservationRequestedEvent.builder()
-        .eventId(IdUtil.generateId())
+        .eventId(eventId)
         .productId(productId)
         .reservationCount(reservationCount)
         .build();

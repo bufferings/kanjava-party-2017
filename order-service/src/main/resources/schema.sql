@@ -1,20 +1,11 @@
-DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS OrderGroup;
 DROP TABLE IF EXISTS OrderItem;
-
-CREATE TABLE Product
-(
-  productId VARCHAR(36) PRIMARY KEY
-  ,productName VARCHAR(30)
-  ,stockQuantity INT
-  ,version INT
-);
 
 CREATE TABLE OrderGroup
 (
   orderGroupId VARCHAR(36) PRIMARY KEY
   ,orderGuestId INT
-  ,orderGuestName VARCHAR(30)
+  ,orderGuestName VARCHAR(255)
   ,status INT
   ,version INT
 );
