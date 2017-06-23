@@ -1,4 +1,4 @@
-package com.example.myserdes;
+package com.example.myserde;
 
 import java.util.Map;
 

@@ -1,0 +1,8 @@
+{
+  "name": "InventoryRecoveryRequestedEvent",
+  "type": "record",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "productId", "type": "string"}
+  ]
+}

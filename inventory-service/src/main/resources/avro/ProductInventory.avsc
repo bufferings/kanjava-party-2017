@@ -1,0 +1,8 @@
+{
+  "name": "ProductInventory",
+  "type": "record",
+  "fields": [
+    {"name": "productId",  "type": "string"},
+    {"name": "inventoryCount", "type": "int"}
+  ]
+}

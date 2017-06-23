@@ -1,0 +1,9 @@
+{
+  "name": "InventoryReservationRequestedEvent",
+  "type": "record",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "productId", "type": "string"},
+    {"name": "reservationCount", "type": "int"}
+  ]
+}
