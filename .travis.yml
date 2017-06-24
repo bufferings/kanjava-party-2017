@@ -13,9 +13,9 @@ services:
 
 script:
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - mvn -f config-service clean package docker:build -DpushImage
-  - mvn -f discovery-service clean package docker:build -DpushImage
-  - mvn -f user-service clean package docker:build -DpushImage
+  # - mvn -f config-service clean package docker:build -DpushImage
+  # - mvn -f discovery-service clean package docker:build -DpushImage
+  # - mvn -f user-service clean package docker:build -DpushImage
   - mvn -f kaiten-sushi-web clean package docker:build -DpushImage
-  - mvn -f order-service clean package docker:build -DpushImage
-  - mvn -f inventory-service clean package docker:build -DpushImage
+  # - mvn -f order-service clean package docker:build -DpushImage
+  # - mvn -f inventory-service clean package docker:build -DpushImage
