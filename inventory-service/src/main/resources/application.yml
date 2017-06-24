@@ -1,6 +1,11 @@
 server:
   port: 8183
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-service.marathon.l4lb.thisdcos.directory:8761/eureka/
+
 schema:
   registry:
     url: http://localhost:8081
