@@ -166,7 +166,7 @@
         <version>0.4.13</version>
         <configuration>
           <useConfigFile>true</useConfigFile>
-          <imageName>${docker.image.prefix}/${project.artifactId}-2</imageName>
+          <imageName>${docker.image.prefix}/${project.artifactId}-3</imageName>
           <dockerDirectory>${basedir}</dockerDirectory>
           <resources>
             <resource>

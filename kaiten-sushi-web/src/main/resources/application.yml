@@ -15,9 +15,8 @@ security:
       user-authorization-uri: https://github.com/login/oauth/authorize
       client-authentication-scheme: form
     resource:
-#      load-balanced: true
-      user-info-uri: http://user-service.marathon.l4lb.thisdcos.directory:8181/me
-#      user-info-uri: http://user-service/me
+      load-balanced: true
+      user-info-uri: http://user-service/me
 
 spring:
   datasource:
